@@ -1,6 +1,8 @@
 <template>
   <div class="dashboard-index">
     <!-- <img src="../../assets/images/img-dashboard.jpeg"/> -->
+    <h1>效率工具库</h1>
+    <p>维护问题可联系：liaoyiwen@bankgz.com</p>
   </div>
 </template>
 
@@ -27,8 +29,20 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: calc(100vh - 60px);
+  flex-direction: column;
+  // background: #eee;
+  h1 {
+    text-align: center;
+    font-size: 30px;
+  }
+
+  p {
+    text-align: center;
+  }
+
   img {
-    max-width: 80%;
+    max-width: 100%;
   }
 }
 </style>
