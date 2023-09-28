@@ -7,9 +7,9 @@
         </div>
         <div class="show-wrapper">
             <p class="type" title="点击可以拷贝源码">源码：</p>
-            <button class="btn-copy" @click="handleCopy">点击拷贝</button>
+            <el-button class="btn-copy" type="primary" size="mini" @click="handleCopy">点击拷贝</el-button>
             <textarea id="input" style="position: fixed; right: -1000px; opacity: 0;"></textarea>
-            <div class="border sec-html" @click="handleCopy" title="点击可以拷贝源码">{{ html }}</div>
+            <div class="border sec-html" @click="handleCopy" title="点击可以拷贝富文本内容">{{ html }}</div>
             <p class="type" style="margin-top: 20px;">预览：</p>
             <div class="border sec-view" v-html="html"></div>
         </div>
@@ -72,7 +72,6 @@ export default {
 
         .btn-copy {
             margin: 0 0 5px;
-            cursor: pointer;
         }
         .type {
             font-size: 18px;
