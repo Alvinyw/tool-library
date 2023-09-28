@@ -30,6 +30,14 @@ const router = new Router({
           name: '富文本编辑器'
         },
       },
+      {
+        path: '/imageEdit',
+        name: 'ImageViewer',
+        component: () => import( /* webpackChunkName: "main" */ '@/views/imageViewer/index'),
+        meta: {
+          name: '图片编辑器'
+        },
+      },
       ]
     },
     {

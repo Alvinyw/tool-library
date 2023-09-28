@@ -10,7 +10,7 @@
           <i class="el-icon-setting"></i>
           <span slot="title">富文本编辑器</span>
         </el-menu-item>
-        <el-menu-item index="3">
+        <el-menu-item index="3" @click="goToPage('ImageViewer')">
           <i class="el-icon-setting"></i>
           <span slot="title">图片编辑器</span>
         </el-menu-item>
@@ -30,12 +30,14 @@
     </el-aside>
 
     <el-container style="padding-top: 60px; position: relative">
-      <el-header class="sec-top">
+      <el-header class="sec-top" style="padding: 0 15px;">
         <span class="page-name">{{ pageName }}</span>
       </el-header>
-      <transition name="fade-transform" mode="out-in">
-        <router-view :key="key" />
-      </transition>
+      <div class="sec-main">
+        <transition name="fade-transform" mode="out-in">
+          <router-view :key="key" />
+        </transition>
+      </div>
     </el-container>
   </el-container>
 </template>
@@ -97,8 +99,12 @@ export default {
     position: fixed;
     top: 0;
     right: 0;
-    z-index: 10;
+    z-index: 20;
     width: calc(100% - 200px);
+  }
+
+  .sec-main {
+    padding: 15px;
   }
 
   .el-aside {

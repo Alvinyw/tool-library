@@ -2,7 +2,7 @@
     <div class="rich-text">
         <div class="edit-wrapper">
             <Toolbar style="border-bottom: 1px solid #ccc" :editor="editor" :defaultConfig="toolbarConfig" :mode="mode" />
-            <Editor style="height: 70vh; overflow-y: hidden;" v-model="html" :defaultConfig="editorConfig" :mode="mode"
+            <Editor style="height: 480px; overflow-y: hidden;" v-model="html" :defaultConfig="editorConfig" :mode="mode"
                 @onCreated="onCreated" />
         </div>
         <div class="show-wrapper">
@@ -48,7 +48,7 @@ export default {
             input.select();//选中文本
             document.execCommand("copy");
             this.$message({
-                message: '已成功拷贝富文本编辑器内源码！',
+                message: '已拷贝富文本内容！',
                 type: 'success'
             });
         }
@@ -57,13 +57,13 @@ export default {
 </script>
 <style lang="scss" scoped>
 .rich-text {
-    padding: 20px;
     display: flex;
     justify-content: space-between;
 
     .edit-wrapper {
         z-index: 15;
         border: 1px solid #ccc;
+        background: #fff;
     }
 
     .show-wrapper {
@@ -80,7 +80,7 @@ export default {
         }
 
         .border {
-            min-height: 35vh;
+            min-height: 230px;
             border: 1px solid #aaa;
         }
 

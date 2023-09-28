@@ -2,7 +2,7 @@
   <div class="dashboard-index">
     <!-- <img src="../../assets/images/img-dashboard.jpeg"/> -->
     <h1>效率工具库</h1>
-    <p>维护问题可联系：liaoyiwen@bankgz.com</p>
+    <p>维护人：liaoyiwen@bankgz.com</p>
   </div>
 </template>
 
