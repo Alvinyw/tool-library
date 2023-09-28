@@ -29,12 +29,13 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 60px);
+  min-height: calc(100vh - 90px);
   flex-direction: column;
   // background: #eee;
   h1 {
     text-align: center;
     font-size: 30px;
+    margin: 0 0 15px;
   }
 
   p {

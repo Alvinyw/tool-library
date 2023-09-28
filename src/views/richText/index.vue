@@ -74,7 +74,8 @@ export default {
             margin: 0 0 5px;
         }
         .type {
-            font-size: 18px;
+            font-size: 16px;
+            line-height: 32px;
             font-weight: bold;
         }
 

@@ -1,20 +1,20 @@
 <template>
   <div class="image-viewer">
     <div class="btn-grp">
-      <el-button type="primary" @click="fuc_LoadImage">导入图片</el-button>
-      <!-- <el-button type="primary" @click="fuc_showVideo">show video</el-button> -->
-      <el-button type="primary" @click="fuc_ShowImageEditor">编辑</el-button>
-      <el-button type="primary" @click="fuc_RemoveCurrentImage">删除选中图片</el-button>
-      <el-button type="primary" @click="fuc_RemoveAllImages">删除所有图片</el-button>
+      <el-button type="primary" size="small" @click="fuc_LoadImage">导入图片</el-button>
+      <!-- <el-button type="primary" size="small" @click="fuc_showVideo">show video</el-button> -->
+      <el-button type="primary" size="small" @click="fuc_ShowImageEditor">编辑</el-button>
+      <el-button type="primary" size="small" @click="fuc_RemoveCurrentImage">删除选中图片</el-button>
+      <el-button type="primary" size="small" @click="fuc_RemoveAllImages">删除所有图片</el-button>
       <div class="btn-grp-edit" v-show="isEditing">
-        <el-button type="primary" @click="fuc_rotateLeft">向左旋转</el-button>
-        <el-button type="primary" @click="fuc_rotateRight">向右旋转</el-button>
-        <!-- <el-button type="primary" @click="fuc_rotate180">Rotate180</el-button> -->
-        <el-button type="primary" @click="fuc_rotateMirror">镜像翻转</el-button>
-        <el-button type="primary" @click="fuc_rotateFlip">上下翻转</el-button>
-        <el-button type="primary" @click="fuc_Crop">裁切</el-button>
-        <el-button type="primary" @click="fuc_CloseImageEditor">取消</el-button>
-        <el-button type="primary" @click="fuc_Save">确定</el-button>
+        <el-button type="primary" size="small" @click="fuc_rotateLeft">向左旋转</el-button>
+        <el-button type="primary" size="small" @click="fuc_rotateRight">向右旋转</el-button>
+        <!-- <el-button type="primary" size="small" @click="fuc_rotate180">Rotate180</el-button> -->
+        <el-button type="primary" size="small" @click="fuc_rotateMirror">镜像翻转</el-button>
+        <el-button type="primary" size="small" @click="fuc_rotateFlip">上下翻转</el-button>
+        <el-button type="primary" size="small" @click="fuc_Crop">裁切</el-button>
+        <el-button type="primary" size="small" @click="fuc_CloseImageEditor">取消</el-button>
+        <el-button type="primary" size="small" @click="fuc_Save">确定</el-button>
       </div>
 
     </div>
@@ -35,14 +35,14 @@ export default {
     var cfg = {
       ContainerId: "imageViewer",
       Width: "900px",
-      Height: "550px",
+      Height: "500px",
     };
     this.imageViewer = createImageViewer(cfg);
   },
   methods: {
     initCheck() {
       if (!this.imageViewer) {
-        return;
+        return false;
       }
       var _imageCount = this.imageViewer.GetCount();
       if (_imageCount < 1) {
@@ -50,7 +50,7 @@ export default {
           message: '请先导入图片',
           type: 'warning'
         });
-        return;
+        return false;
       }
     },
     fuc_LoadImage() {
