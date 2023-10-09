@@ -35,7 +35,7 @@ export default {
   h1 {
     text-align: center;
     font-size: 30px;
-    margin: 0 0 15px;
+    margin: 0 0 20px;
   }
 
   p {

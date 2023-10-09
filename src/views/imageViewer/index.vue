@@ -4,6 +4,7 @@
       <el-button type="primary" size="small" @click="fuc_LoadImage">导入图片</el-button>
       <!-- <el-button type="primary" size="small" @click="fuc_showVideo">show video</el-button> -->
       <el-button type="primary" size="small" @click="fuc_ShowImageEditor">编辑</el-button>
+      <el-button type="primary" size="small" @click="fuc_getImage">下载选中图片</el-button>
       <el-button type="primary" size="small" @click="fuc_RemoveCurrentImage">删除选中图片</el-button>
       <el-button type="primary" size="small" @click="fuc_RemoveAllImages">删除所有图片</el-button>
       <div class="btn-grp-edit" v-show="isEditing">
@@ -13,8 +14,8 @@
         <el-button type="primary" size="small" @click="fuc_rotateMirror">镜像翻转</el-button>
         <el-button type="primary" size="small" @click="fuc_rotateFlip">上下翻转</el-button>
         <el-button type="primary" size="small" @click="fuc_Crop">裁切</el-button>
-        <el-button type="primary" size="small" @click="fuc_CloseImageEditor">取消</el-button>
         <el-button type="primary" size="small" @click="fuc_Save">确定</el-button>
+        <el-button type="primary" size="small" @click="fuc_CloseImageEditor">取消</el-button>
       </div>
 
     </div>
@@ -40,7 +41,7 @@ export default {
     this.imageViewer = createImageViewer(cfg);
   },
   methods: {
-    initCheck() {
+    globalCheck() {
       if (!this.imageViewer) {
         return false;
       }
@@ -52,6 +53,7 @@ export default {
         });
         return false;
       }
+      return true;
     },
     fuc_LoadImage() {
       if (!this.imageViewer) {
@@ -60,62 +62,60 @@ export default {
       this.imageViewer.LoadImageEx();
     },
     fuc_showVideo() {
-      this.initCheck();
+      if (!this.globalCheck()) return;
       this.imageViewer.ShowVideo();
     },
     fuc_ShowImageEditor() {
-      this.initCheck();
+      if (!this.globalCheck()) return;
       this.imageViewer.ShowImageEditor();
       this.isEditing = true;
     },
     fuc_CloseImageEditor() {
-      this.initCheck();
+      if (!this.globalCheck()) return;
       this.imageViewer.CloseImageEditor();
       this.isEditing = false;
     },
-
     fuc_rotateLeft() {
-      this.initCheck();
+      if (!this.globalCheck()) return;
       this.imageViewer.RotateLeft();
     },
-
     fuc_rotateRight() {
-      this.initCheck();
+      if (!this.globalCheck()) return;
       this.imageViewer.RotateRight();
     },
-
     fuc_rotate180() {
-      this.initCheck();
+      if (!this.globalCheck()) return;
       this.imageViewer.Rotate('', 180);
     },
-
     fuc_rotateMirror() {
-      this.initCheck();
+      if (!this.globalCheck()) return;
       this.imageViewer.Mirror();
     },
-
     fuc_rotateFlip() {
-      this.initCheck();
+      if (!this.globalCheck()) return;
       this.imageViewer.Flip();
     },
-
     fuc_Crop() {
-      this.initCheck();
+      if (!this.globalCheck()) return;
       this.imageViewer.Crop();
     },
     fuc_Save() {
-      this.initCheck();
+      if (!this.globalCheck()) return;
       this.imageViewer.Save();
       this.isEditing = false;
     },
     fuc_RemoveCurrentImage() {
-      this.initCheck();
+      if (!this.globalCheck()) return;
       this.imageViewer.RemoveAllSelectedImages();
     },
-
     fuc_RemoveAllImages() {
-      this.initCheck();
+      if (!this.globalCheck()) return;
       this.imageViewer.RemoveAllImages();
+    },
+    fuc_getImage() {
+      if (!this.globalCheck()) return;
+      var _curIndex = this.imageViewer.GetCurentIndex();
+      this.imageViewer.SaveAsPNG('image' + _curIndex, _curIndex);
     }
   },
 };
