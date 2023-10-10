@@ -14,15 +14,11 @@
           <i class="el-icon-setting"></i>
           <span slot="title">图片编辑器</span>
         </el-menu-item>
-        <el-menu-item index="4">
+        <el-menu-item index="4" @click="goToPage('ImgToBase64')">
           <i class="el-icon-setting"></i>
-          <span slot="title">png 转 base64</span>
+          <span slot="title">图片转 base64</span>
         </el-menu-item>
         <el-menu-item index="5">
-          <i class="el-icon-setting"></i>
-          <span slot="title">svg 转 base64</span>
-        </el-menu-item>
-        <el-menu-item index="6">
           <i class="el-icon-setting"></i>
           <span slot="title">word 转 pdf</span>
         </el-menu-item>
@@ -118,6 +114,10 @@ export default {
 
     .el-menu {
       border: none;
+
+      .el-menu-item {
+        // font-weight: bold;
+      }
     }
   }
 }

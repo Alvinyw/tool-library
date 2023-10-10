@@ -38,6 +38,14 @@ const router = new Router({
           name: '图片编辑器'
         },
       },
+      {
+        path: '/imgToBase64',
+        name: 'ImgToBase64',
+        component: () => import( /* webpackChunkName: "main" */ '@/views/imgToBase64/index'),
+        meta: {
+          name: '图片转base64'
+        },
+      },
       ]
     },
     {
