@@ -8,8 +8,6 @@ import ElementUI from 'element-ui'
 import '@/styles/theme/index.css'
 Vue.use(ElementUI)
 
-import '@wangeditor/editor/dist/css/style.css'
-
 import './api' // 接口文件
 import './utils' // 工具库
 import './directive' // 自定义全局指令
