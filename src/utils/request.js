@@ -3,7 +3,7 @@ import axios from 'axios'
 import {
   Message
 } from 'element-ui'
-import store from '../store'
+// import store from '../store'
 import router from '@/router'
 // import {
 //   getYYMMDD,
@@ -31,8 +31,8 @@ service.interceptors.request.use(
     // const productCode = store.getters.productCode
     // const _time = new Date().getTime()
 
-    const { token = '' } = store.getters.userInfo || {};
-    config.headers['authorization'] = token
+    // const { token = '' } = store.getters.userInfo || {};
+    // config.headers['authorization'] = token
     // config.headers['sign'] = md5(merchantCode + secret + _time).toString()
     // config.headers['requestNo'] = merchantCode + productCode + getYYMMDD().toString() + getUUID().toString()
     // config.headers['version'] = '1.0.0'
