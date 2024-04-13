@@ -152,3 +152,205 @@ export function importJSON(callSuccess, callFail) {
   // 触发上传文件
   input.click()
 }
+
+
+/** 
+ * 获取元素尺寸
+ * @param { el } 元素
+ */
+
+export function getElDimensions (el) {
+	var displayFormat, elDimensions;
+
+	if (!el) return false;
+
+	displayFormat = el.style.display;
+
+	el.style.display = '';
+
+	elDimensions =
+	{
+		clientTop: el.clientTop,
+		clientLeft: el.clientLeft,
+		clientWidth: el.clientWidth ? el.clientWidth : (parseInt(el.style.width) ? parseInt(el.style.width) : 0),
+		clientHeight: el.clientHeight ? el.clientHeight : (parseInt(el.style.height) ? parseInt(el.style.height) : 0)
+	};
+
+	el.style.display = displayFormat;
+
+	return elDimensions;
+}
+
+/** 
+ * 是否为数字
+ * @param { val } 入参
+ */
+
+export function isNumber (val) {
+	if (val === "" || val == null) {
+		return false;
+	}
+	if (!isNaN(val)) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+/** 
+ * 是否为空
+ * @param { exp } 入参
+ */
+
+export function isUndefined (exp) {
+	if (typeof (exp) == "undefined") {
+		return true;
+	}
+	return false;
+}
+
+/** 
+ * 是否为函数
+ * @param { _fun } 入参
+ */
+
+export function isFunction (_fun) {
+	return _fun && typeof (_fun) === 'function';
+}
+
+/** 
+ * base64 转 blob
+ * @param { base64Str } base64 格式图片
+ * @param { mimeType } 原图类型
+ */
+
+export function convertBase64ToBlob (base64Str, mimeType) {
+	var byteCharacters = window.atob(base64Str);
+	var byteNumArr = new Array(byteCharacters.length);
+	for (var i = 0; i < byteCharacters.length; ++i) {
+		byteNumArr[i] = byteCharacters.charCodeAt(i);
+	}
+	var uint8Arr = new Uint8Array(byteNumArr);
+	return new Blob([uint8Arr], { type: mimeType });
+}
+
+/** 
+ * URL 转 blob
+ * @param { url } 原图 URL
+ * @param { callback } 回调
+ */
+
+export function convertURLToBlob (url, callback) {
+	var http = new XMLHttpRequest();
+	http.open("GET", url, true);
+	http.responseType = "blob";
+	http.onloadend = function () {
+		callback(this.response);
+	};
+	http.send();
+}
+
+/** 
+ * canvas 转 blob
+ * @param { cvs } canvas 原属
+ * @param { callback } 回调函数
+ * @param { mimeType } 图片类型
+ * @param { quality } 文件质量
+ */
+
+export function canvasToBlob (cvs, callback, mimeType, quality) {
+	if (cvs.toBlob) {
+		cvs.toBlob(callback, mimeType, quality);
+	} else {
+		var b64str = cvs.toDataURL(mimeType, quality);
+		var blob = convertBase64ToBlob(b64str.substring(b64str.indexOf(",") + 1), mimeType);
+		callback(blob);
+	}
+}
+
+/** 
+ * 将任意格式的图片转换成 blob 格式
+ * @param { imgData } 原图
+ * @param { callback } 回调
+ */
+
+export function getBlobFromAnyImgData (imgData, callback) {
+	if (imgData instanceof Blob) {
+		callback(imgData);
+	} else if (imgData instanceof HTMLCanvasElement) {
+		canvasToBlob(imgData, function (blob) {
+			callback(blob);
+		});
+	} else if (typeof imgData == "string" || imgData instanceof String) {
+		var url = imgData;
+		if ("data:" == url.substring(0, 5)) { // url is base64
+			var mimeType = "";
+			if ("image/" == url.substring(5, 11)) {
+				mimeType = url.substring(5, url.indexOf(";", 11));
+			}
+			var blob = convertBase64ToBlob(url.substring(url.indexOf("base64,") + 7), mimeType);
+			callback(blob);
+		} else { // url is link, such as 'https://....'
+			convertURLToBlob(url, function (blob) {
+				callback(blob);
+			});
+		}
+	} else if (imgData instanceof HTMLImageElement) {
+		var src;
+		//src maybe access denied
+		try {
+			src = imgData.src;
+		} catch (ex) {
+			setTimeout(function () {
+				throw (ex);
+			}, 0);
+			callback(null, '');
+			return;
+		}
+
+		// url not available, maybe network problem
+		// use imgData -> canvas -> blob instand 
+		var tCvs = document.createElement('canvas');
+		tCvs.width = imgData.naturalWidth;
+		tCvs.height = imgData.naturalHeight;
+		var ctx = tCvs.getContext('2d');
+		ctx.drawImage(imgData, 0, 0);
+
+		// use suffix guess image mime type
+		var suffix = "";
+		var questionPos = src.lastIndexOf("?");
+		var dotPos = -1;
+		if (-1 != questionPos) {
+			dotPos = src.lastIndexOf(".", questionPos);
+			if (-1 != dotPos && questionPos - dotPos <= 5) { //max supported type suffix is 4
+				suffix = src.substring(dotPos + 1, questionPos);
+			}
+		} else {
+			dotPos = src.lastIndexOf(".");
+			if (-1 != dotPos) {
+				if (src.length - dotPos <= 5) { //max supported type suffix is 4
+					suffix = src.substring(dotPos + 1);
+				} else {
+					suffix = src.substring(dotPos + 1, dotPos + 5);
+				}
+			}
+		}
+		var saveFormat;
+		if (-1 != suffix.indexOf("webp")) {
+			saveFormat = "image/webp";
+		} else if (-1 != suffix.indexOf("png") || -1 != suffix.indexOf("gif") || -1 != suffix.indexOf("svg")) {
+			saveFormat = "image/png";
+		} else { // like jpeg
+			saveFormat = "image/jpeg";
+		}
+
+		canvasToBlob(tCvs, function (blob) {
+			callback(blob);
+		}, saveFormat);
+
+	} else {
+		//not support
+		callback(null);
+	}
+
+}
