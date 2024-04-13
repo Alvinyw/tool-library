@@ -7,20 +7,24 @@
           <span slot="title">首页</span>
         </el-menu-item>
         <el-menu-item index="2" @click="goToPage('RichText')">
-          <i class="el-icon-setting"></i>
+          <i class="el-icon-document"></i>
           <span slot="title">富文本编辑器</span>
         </el-menu-item>
         <el-menu-item index="3" @click="goToPage('ImageViewer')">
-          <i class="el-icon-setting"></i>
+          <i class="el-icon-picture-outline"></i>
           <span slot="title">图片编辑器</span>
         </el-menu-item>
         <el-menu-item index="4" @click="goToPage('ImgFormatConvert')">
-          <i class="el-icon-setting"></i>
+          <i class="el-icon-picture-outline"></i>
           <span slot="title">图片格式转换</span>
         </el-menu-item>
-        <el-menu-item index="5">
-          <i class="el-icon-setting"></i>
-          <span slot="title">word 转 pdf</span>
+        <el-menu-item index="5" @click="goToPage('ImgCompress')">
+          <i class="el-icon-picture-outline"></i>
+          <span slot="title">图片自定义压缩</span>
+        </el-menu-item>
+        <el-menu-item index="6" @click="goToPage('ImgTextSearch')">
+          <i class="el-icon-search"></i>
+          <span slot="title">图片文本搜索</span>
         </el-menu-item>
       </el-menu>
     </el-aside>

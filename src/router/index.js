@@ -33,7 +33,7 @@ const router = new Router({
       {
         path: '/imageEdit',
         name: 'ImageViewer',
-        component: () => import( /* webpackChunkName: "main" */ '@/views/imageViewer/index'),
+        component: () => import( /* webpackChunkName: "image" */ '@/views/imageViewer/index'),
         meta: {
           name: '图片编辑器'
         },
@@ -41,9 +41,25 @@ const router = new Router({
       {
         path: '/imgFormatConvert',
         name: 'ImgFormatConvert',
-        component: () => import( /* webpackChunkName: "main" */ '@/views/imgFormatConvert/index'),
+        component: () => import( /* webpackChunkName: "image" */ '@/views/imgFormatConvert/index'),
         meta: {
           name: '图片格式转换'
+        },
+      },
+      {
+        path: '/imgCompress',
+        name: 'ImgCompress',
+        component: () => import( /* webpackChunkName: "image" */ '@/views/imgCompress/index'),
+        meta: {
+          name: '图片自定义压缩'
+        },
+      },
+      {
+        path: '/imgTextSearch',
+        name: 'ImgTextSearch',
+        component: () => import( /* webpackChunkName: "image" */ '@/views/imgTextSearch/index'),
+        meta: {
+          name: '图片文本搜索'
         },
       },
       ]
