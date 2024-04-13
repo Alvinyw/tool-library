@@ -1,62 +1,62 @@
 // 比较 a、b 是否相等
 export function isObjEqual(a, b) {
-  return JSON.stringify(a) === JSON.stringify(b)
+	return JSON.stringify(a) === JSON.stringify(b)
 }
 
 // 获取格式为 yyyyMMdd 的日期
 export function getYYMMDD(d = new Date()) {
-  var date = new Date(d);
-  //var seperator1 = "-";
-  var year = date.getFullYear();
-  var month = date.getMonth() + 1;
-  var strDate = date.getDate();
-  if (month >= 1 && month <= 9) {
-    month = "0" + month;
-  }
-  if (strDate >= 0 && strDate <= 9) {
-    strDate = "0" + strDate;
-  }
-  var currentdate = year + '-' + month + '-' + strDate;
-  return currentdate;
+	var date = new Date(d);
+	//var seperator1 = "-";
+	var year = date.getFullYear();
+	var month = date.getMonth() + 1;
+	var strDate = date.getDate();
+	if (month >= 1 && month <= 9) {
+		month = "0" + month;
+	}
+	if (strDate >= 0 && strDate <= 9) {
+		strDate = "0" + strDate;
+	}
+	var currentdate = year + '-' + month + '-' + strDate;
+	return currentdate;
 }
 
 // 生成 uuid
 export function getUUID() {
-  var s = [];
-  var hexDigits = "0123456789abcdef";
-  for (var i = 0; i < 32; i++) {
-    s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
-  }
-  s[14] = "4";
-  s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
+	var s = [];
+	var hexDigits = "0123456789abcdef";
+	for (var i = 0; i < 32; i++) {
+		s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+	}
+	s[14] = "4";
+	s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
 
-  var uuid = s.join("");
-  return uuid;
+	var uuid = s.join("");
+	return uuid;
 }
 
 // 根据图片 url 转出 base64
 export function urlToBase64(url, type = 'image/jpeg') {
-  return new Promise((resolve, reject) => {
-    const img = new Image()
-    const canvas = document.createElement('canvas');
-    img.crossOrigin = '*';
-    img.onload = function () {
-      const width = img.width, height = img.height;
-      canvas.width = width;
-      canvas.height = height;
+	return new Promise((resolve, reject) => {
+		const img = new Image()
+		const canvas = document.createElement('canvas');
+		img.crossOrigin = '*';
+		img.onload = function () {
+			const width = img.width, height = img.height;
+			canvas.width = width;
+			canvas.height = height;
 
-      const ctx = canvas.getContext('2d');
-      ctx.fillStyle = 'white';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 0, 0, width, height);
-      const base64 = canvas.toDataURL(type);
-      resolve(base64);
-    };
-    img.onerror = function (err) {
-      reject(new Error(`message:${err}`));
-    };
-    img.src = url;
-  });
+			const ctx = canvas.getContext('2d');
+			ctx.fillStyle = 'white';
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+			ctx.drawImage(img, 0, 0, width, height);
+			const base64 = canvas.toDataURL(type);
+			resolve(base64);
+		};
+		img.onerror = function (err) {
+			reject(new Error(`message:${err}`));
+		};
+		img.src = url;
+	});
 }
 
 /** 
@@ -67,16 +67,16 @@ export function urlToBase64(url, type = 'image/jpeg') {
 
 export function deepCopy(p, r) {
 
-  var c = r || {};
-  for (var i in p) {
-    if (typeof p[i] === 'object') {
-      c[i] = (p[i].constructor === Array) ? [] : {};
-      deepCopy(p[i], c[i]);
-    } else {
-      c[i] = p[i];
-    }
-  }
-  return c;
+	var c = r || {};
+	for (var i in p) {
+		if (typeof p[i] === 'object') {
+			c[i] = (p[i].constructor === Array) ? [] : {};
+			deepCopy(p[i], c[i]);
+		} else {
+			c[i] = p[i];
+		}
+	}
+	return c;
 }
 
 /** 
@@ -86,31 +86,31 @@ export function deepCopy(p, r) {
  */
 
 export function exportJSON(data, name = 'json_data') {
-  if (!data) return;
-  var blob = new Blob([data], { type: "text/json" }),
-    e = document.createEvent("MouseEvents"),
-    a = document.createElement("a");
-  a.download = `${name}_${new Date().getTime()}.json`;
-  a.href = window.URL.createObjectURL(blob);
-  a.dataset.downloadurl = ["text/json", a.download, a.href].join(":");
-  e.initMouseEvent(
-    "click",
-    true,
-    false,
-    window,
-    0,
-    0,
-    0,
-    0,
-    0,
-    false,
-    false,
-    false,
-    false,
-    0,
-    null
-  );
-  a.dispatchEvent(e);
+	if (!data) return;
+	var blob = new Blob([data], { type: "text/json" }),
+		e = document.createEvent("MouseEvents"),
+		a = document.createElement("a");
+	a.download = `${name}_${new Date().getTime()}.json`;
+	a.href = window.URL.createObjectURL(blob);
+	a.dataset.downloadurl = ["text/json", a.download, a.href].join(":");
+	e.initMouseEvent(
+		"click",
+		true,
+		false,
+		window,
+		0,
+		0,
+		0,
+		0,
+		0,
+		false,
+		false,
+		false,
+		false,
+		0,
+		null
+	);
+	a.dispatchEvent(e);
 }
 
 /** 
@@ -120,37 +120,37 @@ export function exportJSON(data, name = 'json_data') {
  */
 
 export function importJSON(callSuccess, callFail) {
-  // 创建一个file input
-  let input = document.createElement('input')
-  input.type = 'file'
+	// 创建一个file input
+	let input = document.createElement('input')
+	input.type = 'file'
 
-  // 绑定onchange事件
-  input.onchange = (event) => {
-    let files = event.target.files
-    if (!files || !files.length) {
-      input = null
-      throw new Error('No files')
-    }
+	// 绑定onchange事件
+	input.onchange = (event) => {
+		let files = event.target.files
+		if (!files || !files.length) {
+			input = null
+			throw new Error('No files')
+		}
 
-    // 当选择文件后，使用FileReader API读取文件，返回数据
-    let reader = new FileReader()
-    reader.onload = (event) => {
-      try {
-        let config = JSON.parse(event.target.result)
-        if (typeof callSuccess == 'function') callSuccess(config);
-        return config
-      } catch (e) {
-        if (typeof callFail == 'function') callFail(e);
-        throw new Error(e)
-      } finally {
-        input = null
-      }
-    }
-    reader.readAsText(files[0])
-  }
+		// 当选择文件后，使用FileReader API读取文件，返回数据
+		let reader = new FileReader()
+		reader.onload = (event) => {
+			try {
+				let config = JSON.parse(event.target.result)
+				if (typeof callSuccess == 'function') callSuccess(config);
+				return config
+			} catch (e) {
+				if (typeof callFail == 'function') callFail(e);
+				throw new Error(e)
+			} finally {
+				input = null
+			}
+		}
+		reader.readAsText(files[0])
+	}
 
-  // 触发上传文件
-  input.click()
+	// 触发上传文件
+	input.click()
 }
 
 
@@ -159,7 +159,7 @@ export function importJSON(callSuccess, callFail) {
  * @param { el } 元素
  */
 
-export function getElDimensions (el) {
+export function getElDimensions(el) {
 	var displayFormat, elDimensions;
 
 	if (!el) return false;
@@ -186,7 +186,7 @@ export function getElDimensions (el) {
  * @param { val } 入参
  */
 
-export function isNumber (val) {
+export function isNumber(val) {
 	if (val === "" || val == null) {
 		return false;
 	}
@@ -202,7 +202,7 @@ export function isNumber (val) {
  * @param { exp } 入参
  */
 
-export function isUndefined (exp) {
+export function isUndefined(exp) {
 	if (typeof (exp) == "undefined") {
 		return true;
 	}
@@ -214,7 +214,7 @@ export function isUndefined (exp) {
  * @param { _fun } 入参
  */
 
-export function isFunction (_fun) {
+export function isFunction(_fun) {
 	return _fun && typeof (_fun) === 'function';
 }
 
@@ -224,7 +224,7 @@ export function isFunction (_fun) {
  * @param { mimeType } 原图类型
  */
 
-export function convertBase64ToBlob (base64Str, mimeType) {
+export function convertBase64ToBlob(base64Str, mimeType) {
 	var byteCharacters = window.atob(base64Str);
 	var byteNumArr = new Array(byteCharacters.length);
 	for (var i = 0; i < byteCharacters.length; ++i) {
@@ -240,7 +240,7 @@ export function convertBase64ToBlob (base64Str, mimeType) {
  * @param { callback } 回调
  */
 
-export function convertURLToBlob (url, callback) {
+export function convertURLToBlob(url, callback) {
 	var http = new XMLHttpRequest();
 	http.open("GET", url, true);
 	http.responseType = "blob";
@@ -258,7 +258,7 @@ export function convertURLToBlob (url, callback) {
  * @param { quality } 文件质量
  */
 
-export function canvasToBlob (cvs, callback, mimeType, quality) {
+export function canvasToBlob(cvs, callback, mimeType, quality) {
 	if (cvs.toBlob) {
 		cvs.toBlob(callback, mimeType, quality);
 	} else {
@@ -274,7 +274,7 @@ export function canvasToBlob (cvs, callback, mimeType, quality) {
  * @param { callback } 回调
  */
 
-export function getBlobFromAnyImgData (imgData, callback) {
+export function getBlobFromAnyImgData(imgData, callback) {
 	if (imgData instanceof Blob) {
 		callback(imgData);
 	} else if (imgData instanceof HTMLCanvasElement) {
@@ -353,4 +353,78 @@ export function getBlobFromAnyImgData (imgData, callback) {
 		callback(null);
 	}
 
+}
+
+/**
+ * 计算base64格式图片的大小，单位M
+ * @param { base64 } base64格式的图片源
+ * @returns 返回传入的base64图片的大小
+ */
+export function calcBase64Size(base64) {
+	if (!base64) return
+	var _idx = base64.indexOf('base64,') + 7;
+	var str = base64.substring(_idx)
+	var enqualIndex = str.indexOf('=')
+	if (enqualIndex > 0) {
+		str = str.substring(0, enqualIndex)
+	}
+	var strLength = str.length
+	var fileLength = parseInt(strLength - (strLength / 8) * 2)
+	var size = (fileLength / 1024 / 1024).toFixed(2)
+	var sizeStr = size + ''
+	var index = sizeStr.indexOf('.')
+	var dou = sizeStr.substr(index + 1, 2)
+	if (dou == '00') {
+		return Number(sizeStr.substring(0, index) + sizeStr.substr(index + 3, 2))
+	}
+	return Number(size)
+}
+
+/**
+ * 前端图片压缩
+ * @param { src } 需要被压缩的原图片，建议传入base64格式的图片源
+ * @param { callBack } 压缩成功后的回调函数
+ * @param { maxSize } 图片压缩后的size上限，默认为1M
+ * @param { scale } 图片的压缩比例，默认为0.9
+ * @returns 返回回调函数的执行，参数为压缩至2M以下的图片
+ */
+
+export function compressionImage(src, callBack, maxSize = 1, scale = 0.9) {
+	const imgSize = calcBase64Size(src)
+	if(maxSize > imgSize) {
+		return callBack(src);
+	}
+	let _scale = scale;
+	if (imgSize > maxSize) {
+		try {
+			var img = new Image()
+			img.src = src
+			img.onload = function () {
+				var _this = this
+				let canvas = document.createElement('canvas')
+				let ctx = canvas.getContext('2d')
+				let width = _this.width * _scale
+				let height = _this.height * _scale
+				canvas.width = width
+				canvas.height = height
+				ctx.fillStyle = '#fff'
+				ctx.fillRect(0, 0, width, height)
+				ctx.drawImage(img, 0, 0, width, height)
+				let newSrc = canvas.toDataURL('image/png', _scale)
+				if (calcBase64Size(newSrc) < maxSize) {
+					callBack(src)
+				} else {
+					compressionImage(newSrc, callBack, maxSize)
+				}
+			}
+			img.onerror = function () {
+				console.log('图片压缩img.onload报错，图片src：', img.src)
+			}
+		} catch (error) {
+			console.log('图片压缩失败，图片src：', error)
+			callBack(src)
+		}
+	} else {
+		callBack(src)
+	}
 }
