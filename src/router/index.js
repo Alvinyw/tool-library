@@ -39,11 +39,11 @@ const router = new Router({
         },
       },
       {
-        path: '/imgToBase64',
-        name: 'ImgToBase64',
-        component: () => import( /* webpackChunkName: "main" */ '@/views/imgToBase64/index'),
+        path: '/imgFormatConvert',
+        name: 'ImgFormatConvert',
+        component: () => import( /* webpackChunkName: "main" */ '@/views/imgFormatConvert/index'),
         meta: {
-          name: '图片转base64'
+          name: '图片格式转换'
         },
       },
       ]

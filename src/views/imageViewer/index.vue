@@ -115,6 +115,7 @@ export default {
     fuc_getImage() {
       if (!this.globalCheck()) return;
       var _curIndex = this.imageViewer.GetCurentIndex();
+      console.log('=====imageViewer========', this.imageViewer.aryImageControls[_curIndex].objImage)
       this.imageViewer.SaveAsPNG('image' + _curIndex, _curIndex);
     }
   },

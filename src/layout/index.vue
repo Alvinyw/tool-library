@@ -14,9 +14,9 @@
           <i class="el-icon-setting"></i>
           <span slot="title">图片编辑器</span>
         </el-menu-item>
-        <el-menu-item index="4" @click="goToPage('ImgToBase64')">
+        <el-menu-item index="4" @click="goToPage('ImgFormatConvert')">
           <i class="el-icon-setting"></i>
-          <span slot="title">图片转 base64</span>
+          <span slot="title">图片格式转换</span>
         </el-menu-item>
         <el-menu-item index="5">
           <i class="el-icon-setting"></i>
