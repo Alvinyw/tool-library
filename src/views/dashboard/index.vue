@@ -2,7 +2,10 @@
   <div class="dashboard-index">
     <!-- <img src="../../assets/images/img-dashboard.jpeg"/> -->
     <h1>效率工具库</h1>
-    <p>维护人：liaoyiwen@bankgz.com</p>
+    <p style="margin: 30px 0 0;">如对现有工具的使用有疑问/建议、有其他工具需求或想一起共同开发，可以联系：</p>
+    <p style="margin: 20px 0 0;">维护人：总行/科技部/开发中心/廖益文</p>
+    <p>电话：18879726585</p>
+    <p>邮箱：liaoyiwen@bankgz.com</p>
   </div>
 </template>
 
@@ -25,13 +28,14 @@ export default {
 
 <style scoped lang="less">
 .dashboard-index {
+  // width: 320px;
+  margin: 0 auto;
   padding: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: calc(100vh - 90px);
   flex-direction: column;
-  // background: #eee;
   h1 {
     text-align: center;
     font-size: 30px;
@@ -39,7 +43,7 @@ export default {
   }
 
   p {
-    text-align: center;
+    // text-align: left;
   }
 
   img {
