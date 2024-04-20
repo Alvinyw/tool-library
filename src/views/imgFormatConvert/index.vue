@@ -72,6 +72,7 @@ export default {
     mounted() {
     },
     methods: {
+        // 上传图片
         onUploadChange() {
             var file = document.getElementById("imageUpload").files[0];
             //判断获取的是否为图片文件
@@ -89,6 +90,7 @@ export default {
             this.getImgOriginalInfo(file);
             this.convertImg();
         },
+        // 获取图片原始信息
         getImgOriginalInfo(file = {}) {
             const { type = "image/png" } = file;
             this.imgOriginalInfo.type = type.substr(6).toUpperCase();
@@ -101,6 +103,7 @@ export default {
                 _this.imgOriginalInfo.height = height;
             };
         },
+        // 图片格式转换
         convertImg() {
             if (!this.imageFile) {
                 this.$message({
@@ -137,6 +140,7 @@ export default {
                 });
             }
         },
+        // 图片下载
         downloadImg() {
             if (Number(this.currentValue) == 0) {
                 return this.downloadBase64ToTxt()
@@ -162,6 +166,7 @@ export default {
             }, 10000);
 
         },
+        // pdf下载
         downloadPdf() {
             const doc = new jsPDF(); // 默认是 A4纸，A4纸的尺寸是 210mm * 297mm（595px * 842px）
             const { type = 'PNG', width = 0, height = 0 } = this.imgOriginalInfo;
@@ -184,6 +189,7 @@ export default {
             doc.addImage(this.blobFile, type, (210 - _w)/2, (297 - _h)/2, _w, _h, '', _c)
             doc.save(`${(new Date()).getTime()}.pdf`);
         },
+        // 下载 bas64 文本
         downloadBase64ToTxt() {
             // dada 表示要转换的字符串数据，type 表示要转换的数据格式
             const blob = new Blob([this.base64File], {
@@ -204,6 +210,7 @@ export default {
             // 当你结束使用某个 URL 对象之后，应该通过调用这个方法来让浏览器知道不用在内存中继续保留对这个文件的引用了。
             URL.revokeObjectURL(objectURL)
         },
+        // 复制 base64 文本
         handleCopy() {
             var input = document.getElementById("copyInput");
             input.value = this.base64File;
