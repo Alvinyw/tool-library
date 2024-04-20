@@ -62,6 +62,14 @@ const router = new Router({
           name: '图片文本搜索'
         },
       },
+      {
+        path: '/excelSplit',
+        name: 'ExcelSplit',
+        component: () => import( /* webpackChunkName: "excel" */ '@/views/excelSplit/index'),
+        meta: {
+          name: 'excel 文件拆分'
+        },
+      },
       ]
     },
     {

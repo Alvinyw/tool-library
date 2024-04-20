@@ -22,7 +22,11 @@
           <i class="el-icon-picture-outline"></i>
           <span slot="title">图片自定义压缩</span>
         </el-menu-item>
-        <el-menu-item index="6" @click="goToPage('ImgTextSearch')">
+        <el-menu-item index="6" @click="goToPage('ExcelSplit')">
+          <i class="el-icon-picture-outline"></i>
+          <span slot="title">Excel文件拆分</span>
+        </el-menu-item>
+        <el-menu-item index="7" @click="goToPage('ImgTextSearch')">
           <i class="el-icon-search"></i>
           <span slot="title">图片文本搜索</span>
         </el-menu-item>
