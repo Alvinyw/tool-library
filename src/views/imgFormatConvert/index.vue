@@ -27,12 +27,19 @@
     </div>
 </template>
 <script>
+import { jsPDF } from "jspdf"; // https://artskydj.github.io/jsPDF/docs/index.html
 
 export default {
     name: "ImgFormatConvert",
     data() {
         return {
             imageFile: '',
+            imgOriginalInfo: {
+                width: 0,
+                height: 0,
+                type: '',
+                src: '',
+            },
             base64File: '',
             blobFile: '',
             options: [{
@@ -77,9 +84,22 @@ export default {
             }
             this.imageFile = file;
             const windowURL = window.URL || window.webkitURL;
-            const dataURl = windowURL.createObjectURL(file);
-            document.getElementById("orignImage").innerHTML = '<img style="max-width: 95%;" src="' + dataURl + '" alt="原图"/>';
+            this.imgOriginalInfo.src = windowURL.createObjectURL(file);
+            document.getElementById("orignImage").innerHTML = '<img style="max-width: 95%;" src="' + this.imgOriginalInfo.src + '" alt="原图"/>';
+            this.getImgOriginalInfo(file);
             this.convertImg();
+        },
+        getImgOriginalInfo(file = {}) {
+            const { type = "image/png" } = file;
+            this.imgOriginalInfo.type = type.substr(6).toUpperCase();
+            let img = new Image();
+            img.src = this.imgOriginalInfo.src;
+            let _this = this; // onload 里面不能用this
+            img.onload = function () {
+                const { width = '', height = '' } = img;
+                _this.imgOriginalInfo.width = width;
+                _this.imgOriginalInfo.height = height;
+            };
         },
         convertImg() {
             if (!this.imageFile) {
@@ -119,25 +139,50 @@ export default {
         },
         downloadImg() {
             if (Number(this.currentValue) == 0) {
-                this.downloadBase64ToTxt()
-            } else {
-                var a = document.createElement('a');
-                a.target = '_blank';
-                var blob = this.blobFile;
-                a.download = (new Date()).getTime() + `.${this.options[this.currentValue].label}`;
-                var objUrl = blob;
-                a.href = objUrl;
-                var ev = new MouseEvent('click', {
-                    "view": window,
-                    "bubbles": true,
-                    "cancelable": false
-                });
-                a.dispatchEvent(ev);
-                //a.click();
-                setTimeout(function () {
-                    URL.revokeObjectURL(objUrl);
-                }, 10000);
+                return this.downloadBase64ToTxt()
             }
+            if (Number(this.currentValue) == 4) {
+                return this.downloadPdf()
+            }
+            var a = document.createElement('a');
+            a.target = '_blank';
+            var blob = this.blobFile;
+            a.download = (new Date()).getTime() + `.${this.options[this.currentValue].label}`;
+            var objUrl = blob;
+            a.href = objUrl;
+            var ev = new MouseEvent('click', {
+                "view": window,
+                "bubbles": true,
+                "cancelable": false
+            });
+            a.dispatchEvent(ev);
+            //a.click();
+            setTimeout(function () {
+                URL.revokeObjectURL(objUrl);
+            }, 10000);
+
+        },
+        downloadPdf() {
+            const doc = new jsPDF(); // 默认是 A4纸，A4纸的尺寸是 210mm * 297mm（595px * 842px）
+            const { type = 'PNG', width = 0, height = 0 } = this.imgOriginalInfo;
+            const _rate = 210 / 595;
+            var _w = width*_rate;
+            var _h = height*_rate;
+            var _c = 1;
+            if(_w > 210) {
+                _c = 210 / _w;
+                _w = 210;
+                _h = _c * _h;
+            }
+            if(_h > 297) {
+                const _c2 = 297 / _h;
+                _h = 297;
+                _w =  _w * _c2;
+                _c = _c * _c2;
+            }
+            // https://artskydj.github.io/jsPDF/docs/module-addImage.html#~addImage
+            doc.addImage(this.blobFile, type, (210 - _w)/2, (297 - _h)/2, _w, _h, '', _c)
+            doc.save(`${(new Date()).getTime()}.pdf`);
         },
         downloadBase64ToTxt() {
             // dada 表示要转换的字符串数据，type 表示要转换的数据格式
@@ -168,7 +213,7 @@ export default {
                 message: '已拷贝 base64 文本！',
                 type: 'success'
             });
-        }
+        },
     }
 }
 </script>

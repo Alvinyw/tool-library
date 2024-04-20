@@ -34,7 +34,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 90px);
+  min-height: calc(100vh - 95px);
   flex-direction: column;
   h1 {
     text-align: center;
