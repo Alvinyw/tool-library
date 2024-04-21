@@ -1,18 +1,24 @@
 <template>
     <div class="app-container">
         <upload-excel-component :on-success="handleSuccess" :before-upload="beforeUpload" />
-        <div style="margin:30px 0">
-            <el-input v-model="filename" placeholder="请输入导出的文件名 (默认为：excel-list)"
-                style="width:350px;" prefix-icon="el-icon-document" />
-            <el-button :loading="downloadLoading" style="margin:0 0 0 20px" type="primary" icon="el-icon-document"
+        <div style="margin:30px 0 20px">
+            选择需要导出的列：<el-select v-model="selectedCols" multiple collapse-tags placeholder="请选择" style="margin: 0 15px 0 0;">
+                <el-option v-for="(value, index) in originalHeader" :key="index" :label="value" :value="value">
+                </el-option>
+            </el-select>
+            文件名：
+            <el-input v-model="filename" placeholder="默认为：excel-list" style="width: 260px;"
+                prefix-icon="el-icon-document" />
+            <el-button :loading="downloadLoading" style="margin:0 0 0 15px" type="primary" icon="el-icon-document"
                 @click="handleDownload">
                 导出已选择项
             </el-button>
         </div>
-        <el-table ref="multipleTable" :data="list" :loading="listLoading" border fit highlight-current-row
-            style="width: 100%;margin-top:20px;" @selection-change="handleSelectionChange">
-            <el-table-column v-if="list" type="selection" align="center" />
-            <el-table-column v-for="item of tableHeader" :key="item" :prop="item" :label="item" />
+        <el-table ref="multipleTable" :data="originalList" :loading="listLoading" border stripe fit
+            highlight-current-row style="width: 100%;margin-top:20px;" @selection-change="handleSelectionChange">
+            <el-table-column v-if="originalList" fixed type="selection" align="center" />
+            <el-table-column v-for="item of originalHeader.filter(item => selectedCols.includes(item))" :key="item"
+                :prop="item" :label="item" />
         </el-table>
     </div>
 </template>
@@ -25,12 +31,13 @@ export default {
     components: { UploadExcelComponent },
     data() {
         return {
+            originalList: null, // 原始表格数据
+            originalHeader: [], // 原始表格的表头
             listLoading: false,
-            list: null,
-            tableHeader: [],
-            multipleSelection: [],
+            selectedRows: [], // 表格中选中的行
+            selectedCols: [], // 表格中选中的列
             downloadLoading: false,
-            filename: ''
+            filename: '', // 导出文件名
         }
     },
     methods: {
@@ -49,39 +56,56 @@ export default {
             return true;
         },
         handleSuccess({ results, header }) {
-            console.log(results, header)
             this.listLoading = false;
-            this.list = results
-            this.tableHeader = header
+            this.originalList = results
+            this.originalHeader = header
+            this.selectedCols = header
         },
         handleSelectionChange(val) {
-            this.multipleSelection = val
-            console.log(val)
+            this.selectedRows = val
         },
+        // 导出表格
         handleDownload() {
-            if (this.multipleSelection.length) {
-                this.downloadLoading = true
-                import('@/vendor/Export2Excel').then(excel => {
-                    // const tHeader = ['Id', 'Title', 'Author', 'Readings', 'Date']; // 表头
-                    // const filterVal = ['id', 'title', 'author', 'pageviews', 'display_time']; // 筛选字段
-                    const list = this.multipleSelection
-                    const data = this.formatJson(this.tableHeader, list)
-                    console.log('=============data==========', data)
-                    excel.export_json_to_excel({
-                        header: this.tableHeader,
-                        data,
-                        filename: this.filename
-                    })
-                    this.$refs.multipleTable.clearSelection()
-                    this.downloadLoading = false
-                })
-            } else {
+            if (this.selectedRows.length < 1) {
                 this.$message({
-                    message: 'Please select at least one item',
+                    message: '请至少选择一行数据',
                     type: 'warning'
                 })
+                return false;
             }
+            if (this.selectedCols.length < 1) {
+                this.$message({
+                    message: '请至少选择一列数据',
+                    type: 'warning'
+                })
+                return false;
+            }
+            this.downloadLoading = true
+            import('@/vendor/Export2Excel').then(excel => {
+                // 摘出表格中选中的列数据
+                const list = this.selectedRows.map(o => {
+                    const _o = {}
+                    for (const key in o) {
+                        if (this.selectedCols.includes(key)) {
+                            _o[key] = o[key]
+                        }
+                    }
+                    return _o
+                })
+                // 过滤出要导出的列
+                const filterHeader = this.originalHeader.filter(item => this.selectedCols.includes(item));
+                // 格式化数据
+                const data = this.formatJson(filterHeader, list)
+                excel.export_json_to_excel({
+                    header: filterHeader,
+                    data,
+                    filename: this.filename
+                })
+                // this.$refs.multipleTable.clearSelection()
+                this.downloadLoading = false
+            })
         },
+        // 格式化数据
         formatJson(filterVal, jsonData) {
             return jsonData.map(v => filterVal.map(j => v[j]))
         }
