@@ -70,6 +70,14 @@ const router = new Router({
           name: 'excel文件拆分'
         },
       },
+      {
+        path: '/excelFormatConvert',
+        name: 'ExcelFormatConvert',
+        component: () => import( /* webpackChunkName: "excel" */ '@/views/excel/excelFormatConvert/index'),
+        meta: {
+          name: 'excel文件格式转换'
+        },
+      },
       ]
     },
     {

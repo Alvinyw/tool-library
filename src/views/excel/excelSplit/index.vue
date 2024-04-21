@@ -1,6 +1,11 @@
 <template>
-    <div class="app-container">
-        <upload-excel-component :on-success="handleSuccess" :before-upload="beforeUpload" />
+    <div class="excel-split">
+        <div class="sec-top">
+            <el-alert style="width: 255px;margin: 0 10px 0 0;" title="功能介绍：将excel表格中选中的行跟列导出成一个新的excel。" type="info" show-icon close-text="知道了">
+            </el-alert>
+            <div style="flex: auto;"><upload-excel-component :on-success="handleSuccess"
+                    :before-upload="beforeUpload" /></div>
+        </div>
         <div style="margin:30px 0 20px">
             选择列：<el-select v-model="selectedCols" multiple collapse-tags placeholder="请选择要导出的列"
                 style="margin: 0 15px 0 0;">
@@ -29,7 +34,7 @@ import FilenameOption from '../components/FilenameOption'
 import AutoWidthOption from '../components/AutoWidthOption'
 
 export default {
-    name: 'UploadExcel',
+    name: 'ExcelSplit',
     components: { FilenameOption, AutoWidthOption, UploadExcelComponent },
     data() {
         return {
@@ -116,3 +121,13 @@ export default {
     }
 }
 </script>
+<style lang="scss" scoped>
+.excel-split {
+    .sec-top {
+        display: flex;
+        .el-alert__title {
+            font-size: 16px;
+        }
+    }
+}
+</style>
