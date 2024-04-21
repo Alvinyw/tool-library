@@ -3,9 +3,9 @@
         <input ref="excel-upload-input" class="excel-upload-input" type="file" accept=".xlsx, .xls"
             @change="handleClick">
         <div class="drop" @drop="handleDrop" @dragover="handleDragover" @dragenter="handleDragover">
-            Drop excel file here or
-            <el-button :loading="loading" style="margin-left:16px;" size="mini" type="primary" @click="handleUpload">
-                Browse
+            将excel文件拖拽到框内，或者
+            <el-button :loading="loading" style="margin-left:15px;" type="primary" @click="handleUpload">
+                点击上传
             </el-button>
         </div>
     </div>
@@ -84,7 +84,6 @@ export default {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader()
                 reader.onload = e => {
-                    console.log(e)
                     const data = e.target.result
                     const workbook = XLSX.read(data, { type: 'array' })
                     const firstSheetName = workbook.SheetNames[0]
@@ -127,8 +126,8 @@ export default {
 }
 
 .drop {
-    border: 2px dashed #bbb;
-    width: 600px;
+    border: 2px dashed #aaa;
+    width: 100%;
     height: 160px;
     line-height: 160px;
     margin: 0 auto;
