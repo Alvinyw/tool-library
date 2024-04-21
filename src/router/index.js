@@ -65,9 +65,9 @@ const router = new Router({
       {
         path: '/excelSplit',
         name: 'ExcelSplit',
-        component: () => import( /* webpackChunkName: "excel" */ '@/views/excelSplit/index'),
+        component: () => import( /* webpackChunkName: "excel" */ '@/views/excel/excelSplit/index'),
         meta: {
-          name: 'excel 文件拆分'
+          name: 'excel文件拆分'
         },
       },
       ]
