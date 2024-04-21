@@ -26,14 +26,26 @@
           <i class="el-icon-picture-outline"></i>
           <span slot="title">图片文本搜索</span>
         </el-menu-item>
-        <el-menu-item index="7" @click="goToPage('ExcelSplit')">
-          <i class="el-icon-document"></i>
-          <span slot="title">Excel文件拆分</span>
-        </el-menu-item>
-        <el-menu-item index="8" @click="goToPage('ExcelFormatConvert')">
+        <el-menu-item index="7" @click="goToPage('ExcelFormatConvert')">
           <i class="el-icon-document"></i>
           <span slot="title">Excel格式转换</span>
         </el-menu-item>
+        <el-menu-item index="8" @click="goToPage('ExcelSplit')">
+          <i class="el-icon-document"></i>
+          <span slot="title">Excel拆分（行跟列）</span>
+        </el-menu-item>
+        <!-- <el-menu-item index="8" @click="goToPage('ExcelSplit')">
+          <i class="el-icon-document"></i>
+          <span slot="title">Excel合并（行跟列）</span>
+        </el-menu-item>
+        <el-menu-item index="8" @click="goToPage('ExcelSplit')">
+          <i class="el-icon-document"></i>
+          <span slot="title">Excel拆分（Sheet页）</span>
+        </el-menu-item>
+        <el-menu-item index="8" @click="goToPage('ExcelSplit')">
+          <i class="el-icon-document"></i>
+          <span slot="title">Excel合并（Sheet页）</span>
+        </el-menu-item> -->
       </el-menu>
     </el-aside>
 

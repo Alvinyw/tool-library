@@ -1,7 +1,7 @@
 <template>
     <div class="excel-format-convert">
         <div class="sec-top">
-            <el-alert style="width: 255px;margin: 0 10px 0 0;" title="功能介绍：将导入的excel表格转换成【'xlsx', 'csv', 'txt'】中的任意一种格式，并导出。" type="info" show-icon close-text="知道了">
+            <el-alert style="width: 300px;margin: 0 10px 0 0;" title="功能介绍：将导入的excel表格转换成【'xlsx', 'csv', 'txt'】中的任意一种格式，并导出。" type="info" show-icon close-text="知道了">
             </el-alert>
             <div style="flex: auto;"><upload-excel-component :on-success="handleSuccess"
                     :before-upload="beforeUpload" /></div>

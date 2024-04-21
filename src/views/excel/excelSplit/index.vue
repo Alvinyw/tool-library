@@ -1,7 +1,7 @@
 <template>
     <div class="excel-split">
         <div class="sec-top">
-            <el-alert style="width: 255px;margin: 0 10px 0 0;" title="功能介绍：将excel表格中选中的行跟列导出成一个新的excel。" type="info" show-icon close-text="知道了">
+            <el-alert style="width: 300px;margin: 0 10px 0 0;" title="功能介绍：将单个excel表格中选中的行跟列导出成一个新的excel。" type="info" show-icon close-text="知道了">
             </el-alert>
             <div style="flex: auto;"><upload-excel-component :on-success="handleSuccess"
                     :before-upload="beforeUpload" /></div>
