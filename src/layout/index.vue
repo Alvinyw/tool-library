@@ -34,17 +34,21 @@
           <i class="el-icon-document"></i>
           <span slot="title">Excel拆分（行跟列）</span>
         </el-menu-item>
-        <!-- <el-menu-item index="8" @click="goToPage('ExcelSplit')">
+        <!-- <el-menu-item index="" @click="goToPage('ExcelSplit')">
           <i class="el-icon-document"></i>
           <span slot="title">Excel合并（行跟列）</span>
         </el-menu-item>
-        <el-menu-item index="8" @click="goToPage('ExcelSplit')">
+        <el-menu-item index="" @click="goToPage('ExcelSplit')">
           <i class="el-icon-document"></i>
           <span slot="title">Excel拆分（Sheet页）</span>
         </el-menu-item>
-        <el-menu-item index="8" @click="goToPage('ExcelSplit')">
+        <el-menu-item index="" @click="goToPage('ExcelSplit')">
           <i class="el-icon-document"></i>
           <span slot="title">Excel合并（Sheet页）</span>
+        </el-menu-item> -->
+        <!-- <el-menu-item index="9" @click="goToPage('ExcelZip')">
+          <i class="el-icon-document"></i>
+          <span slot="title">Excel文件压缩</span>
         </el-menu-item> -->
       </el-menu>
     </el-aside>

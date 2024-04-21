@@ -78,6 +78,14 @@ const router = new Router({
           name: 'excel文件格式转换'
         },
       },
+      {
+        path: '/excelZip',
+        name: 'ExcelZip',
+        component: () => import( /* webpackChunkName: "excel" */ '@/views/excel/excelZip/index'),
+        meta: {
+          name: 'excel文件压缩'
+        },
+      },
       ]
     },
     {
