@@ -6,50 +6,63 @@
           <i class="el-icon-menu"></i>
           <span slot="title">首页</span>
         </el-menu-item>
-        <el-menu-item index="2" @click="goToPage('RichText')">
-          <i class="el-icon-edit-outline"></i>
-          <span slot="title">富文本编辑器</span>
-        </el-menu-item>
-        <el-menu-item index="3" @click="goToPage('ImageViewer')">
-          <i class="el-icon-picture-outline"></i>
-          <span slot="title">图片编辑器</span>
-        </el-menu-item>
-        <el-menu-item index="4" @click="goToPage('ImgFormatConvert')">
-          <i class="el-icon-picture-outline"></i>
-          <span slot="title">图片格式转换</span>
-        </el-menu-item>
-        <el-menu-item index="5" @click="goToPage('ImgCompress')">
-          <i class="el-icon-picture-outline"></i>
-          <span slot="title">图片自定义压缩</span>
-        </el-menu-item>
-        <el-menu-item index="6" @click="goToPage('ImgTextSearch')">
-          <i class="el-icon-picture-outline"></i>
-          <span slot="title">图片文本搜索</span>
-        </el-menu-item>
-        <el-menu-item index="7" @click="goToPage('ExcelFormatConvert')">
-          <i class="el-icon-document"></i>
-          <span slot="title">Excel格式转换</span>
-        </el-menu-item>
-        <el-menu-item index="8" @click="goToPage('ExcelSplit')">
-          <i class="el-icon-document"></i>
-          <span slot="title">Excel拆分（行跟列）</span>
-        </el-menu-item>
-        <!-- <el-menu-item index="" @click="goToPage('ExcelSplit')">
-          <i class="el-icon-document"></i>
-          <span slot="title">Excel合并（行跟列）</span>
-        </el-menu-item>
-        <el-menu-item index="" @click="goToPage('ExcelSplit')">
-          <i class="el-icon-document"></i>
-          <span slot="title">Excel拆分（Sheet页）</span>
-        </el-menu-item>
-        <el-menu-item index="" @click="goToPage('ExcelSplit')">
-          <i class="el-icon-document"></i>
-          <span slot="title">Excel合并（Sheet页）</span>
-        </el-menu-item> -->
-        <!-- <el-menu-item index="9" @click="goToPage('ExcelZip')">
-          <i class="el-icon-document"></i>
-          <span slot="title">Excel文件压缩</span>
-        </el-menu-item> -->
+        <el-submenu index="2">
+          <template slot="title">
+            <i class="el-icon-edit-outline"></i>
+            <span>文本</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item index="2-1" @click="goToPage('RichText')">
+              富文本编辑器
+            </el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
+        <el-submenu index="3">
+          <template slot="title">
+            <i class="el-icon-picture-outline"></i>
+            <span>图片</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item index="3-1" @click="goToPage('ImageViewer')">
+              图片编辑器
+            </el-menu-item>
+            <el-menu-item index="3-2" @click="goToPage('ImgFormatConvert')">
+              图片格式转换
+            </el-menu-item>
+            <el-menu-item index="3-3" @click="goToPage('ImgCompress')">
+              图片自定义压缩
+            </el-menu-item>
+            <el-menu-item index="3-4" @click="goToPage('ImgTextSearch')">
+              图片文本搜索
+            </el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
+        <el-submenu index="4">
+          <template slot="title">
+            <i class="el-icon-document"></i>
+            <span>Excel</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item index="4-1" @click="goToPage('ExcelFormatConvert')">
+              Excel格式转换
+            </el-menu-item>
+            <el-menu-item index="4-2" @click="goToPage('ExcelSplit')">
+              Excel拆分（行跟列）
+            </el-menu-item>
+            <!-- <el-menu-item index="" @click="goToPage('ExcelSplit')">
+Excel合并（行跟列）
+</el-menu-item>
+<el-menu-item index="" @click="goToPage('ExcelSplit')">
+Excel拆分（Sheet页）
+</el-menu-item>
+<el-menu-item index="" @click="goToPage('ExcelSplit')">
+Excel合并（Sheet页）
+</el-menu-item> -->
+            <!-- <el-menu-item index="9" @click="goToPage('ExcelZip')">
+Excel文件压缩
+</el-menu-item> -->
+          </el-menu-item-group>
+        </el-submenu>
       </el-menu>
     </el-aside>
 
