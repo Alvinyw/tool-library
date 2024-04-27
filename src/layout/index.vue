@@ -1,8 +1,8 @@
 <template>
   <el-container class="page-layout">
     <el-aside width="200px">
-      <el-menu :default-active="activeMenu" @select="handleSelect">
-        <el-menu-item index="1" @click="goToPage('Dashboard')">
+      <el-menu :default-active="activeMenu">
+        <el-menu-item index="Dashboard" @click="goToPage('Dashboard')">
           <i class="el-icon-menu"></i>
           <span slot="title">首页</span>
         </el-menu-item>
@@ -12,7 +12,7 @@
             <span>文本</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="2-1" @click="goToPage('RichText')">
+            <el-menu-item index="RichText" @click="goToPage('RichText')">
               富文本编辑器
             </el-menu-item>
           </el-menu-item-group>
@@ -23,16 +23,16 @@
             <span>图片</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="3-1" @click="goToPage('ImageViewer')">
+            <el-menu-item index="ImageViewer" @click="goToPage('ImageViewer')">
               图片编辑器
             </el-menu-item>
-            <el-menu-item index="3-2" @click="goToPage('ImgFormatConvert')">
+            <el-menu-item index="ImgFormatConvert" @click="goToPage('ImgFormatConvert')">
               图片格式转换
             </el-menu-item>
-            <el-menu-item index="3-3" @click="goToPage('ImgCompress')">
+            <el-menu-item index="ImgCompress" @click="goToPage('ImgCompress')">
               图片自定义压缩
             </el-menu-item>
-            <el-menu-item index="3-4" @click="goToPage('ImgTextSearch')">
+            <el-menu-item index="ImgTextSearch" @click="goToPage('ImgTextSearch')">
               图片文本搜索
             </el-menu-item>
           </el-menu-item-group>
@@ -43,10 +43,10 @@
             <span>Excel</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="4-1" @click="goToPage('ExcelFormatConvert')">
+            <el-menu-item index="ExcelFormatConvert" @click="goToPage('ExcelFormatConvert')">
               Excel格式转换
             </el-menu-item>
-            <el-menu-item index="4-2" @click="goToPage('ExcelSplit')">
+            <el-menu-item index="ExcelSplit" @click="goToPage('ExcelSplit')">
               Excel拆分（行跟列）
             </el-menu-item>
             <!-- <el-menu-item index="" @click="goToPage('ExcelSplit')">
@@ -88,7 +88,7 @@ export default {
   },
   data() {
     return {
-      activeMenu: this.$cookies.getCurrentMenuIndex() || '1',
+      activeMenu: this.$cookies.getCurrentRouteName() || 'Dashboard',
     };
   },
   computed: {
@@ -101,15 +101,21 @@ export default {
       return name;
     },
   },
+  mounted() {
+    const { name = "" } = this.$route || {};
+    const _name = this.$cookies.getCurrentRouteName();
+    if (name != _name) {
+      this.$cookies.setCurrentRouteName(name);
+      this.activeMenu = name;
+    }
+  },
   methods: {
     goToPage(pageName) {
       const { name = "" } = this.$route || {};
       if (name == pageName) return;
       this.$router.push({ name: pageName })
+      this.$cookies.setCurrentRouteName(pageName);
     },
-    handleSelect(index) {
-      this.$cookies.setCurrentMenuIndex(index);
-    }
   }
 };
 </script>

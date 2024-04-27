@@ -6,6 +6,7 @@ import Cookies from 'js-cookie'
 // Cookies.remove("aa");
 
 const currentMenuIndex = 'currentMenuIndex'
+const currentRouteName = 'currentRouteName'
 
 export function getCurrentMenuIndex() {
   return (Cookies.get(currentMenuIndex))
@@ -16,10 +17,13 @@ export function setCurrentMenuIndex(val) {
 export function removeCurrentMenuIndex() {
   return Cookies.remove(currentMenuIndex)
 }
-export function setToken(token){
-    return Cookies.set('token',token);
+export function getCurrentRouteName() {
+  return (Cookies.get(currentRouteName))
 }
-export function getToken(){
-    return Cookies.get('token');
+export function setCurrentRouteName(val) {
+  return Cookies.set(currentRouteName, val)
+}
+export function removeCurrentRouteName() {
+  return Cookies.remove(currentRouteName)
 }
 
