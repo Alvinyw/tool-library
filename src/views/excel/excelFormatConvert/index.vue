@@ -1,7 +1,9 @@
 <template>
     <div class="excel-format-convert">
         <div class="sec-top">
-            <el-alert style="width: 300px;margin: 0 10px 0 0;" title="功能介绍：将导入的excel表格转换成【'xlsx', 'csv', 'txt'】中的任意一种格式，并导出。" type="info" show-icon close-text="知道了">
+            <el-alert style="width: 320px;margin: 0 10px 0 0;"
+                title="使用说明：1、导入excel表格；2、填写导出的文件名（非必填）；3、选择导出的文件格式（支持'xlsx', 'csv', 'txt'）；4、点击“转换并导出”按钮。" type="info"
+                show-icon close-text="知道了">
             </el-alert>
             <div style="flex: auto;"><upload-excel-component :on-success="handleSuccess"
                     :before-upload="beforeUpload" /></div>
@@ -14,10 +16,10 @@
                 转换并导出
             </el-button>
         </div>
-        <el-table :data="originalList" :loading="listLoading" border stripe fit
-            highlight-current-row style="width: 100%;margin-top:20px;">
-            <el-table-column v-for="item of originalHeader" :key="item"
-                :prop="item" :label="item" />
+        <el-table :data="originalList" :loading="listLoading" border stripe fit highlight-current-row
+            style="width: 100%;margin-top:20px;"
+            :header-cell-style="{ 'background': '#409EFF', 'color': 'white', 'text-align': 'center' }">
+            <el-table-column v-for="item of originalHeader" :key="item" :prop="item" :label="item" />
         </el-table>
     </div>
 </template>
@@ -86,6 +88,7 @@ export default {
 .excel-format-convert {
     .sec-top {
         display: flex;
+
         .el-alert__title {
             font-size: 16px;
         }

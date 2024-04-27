@@ -361,7 +361,7 @@ export function getBlobFromAnyImgData(imgData, callback) {
  * @returns 返回传入的base64图片的大小
  */
 export function calcBase64Size(base64) {
-	if (!base64) return
+	if (!base64) return 0;
 	var _idx = base64.indexOf('base64,') + 7;
 	var str = base64.substring(_idx)
 	var enqualIndex = str.indexOf('=')

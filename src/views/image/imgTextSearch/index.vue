@@ -1,7 +1,8 @@
 <template>
     <div class="img-text-search">
-        工具介绍：根据图片中的文本信息，将图片从列表中搜索出来。<br/>
-        暂时没时间搞了，有使用需求可以联系总行/科技部/廖益文。
+        <el-alert style="" title="功能介绍：根据图片中包含的文本信息，从图片列表中将目标图片搜索出来。暂时没时间搞了，有使用需求可以联系总行/科技部/廖益文。" type="info" show-icon
+            close-text="知道了">
+        </el-alert>
     </div>
 </template>
 <script>
@@ -19,10 +20,5 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.img-text-search {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 60vh;
-}
+.img-text-search {}
 </style>

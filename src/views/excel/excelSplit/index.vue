@@ -1,7 +1,9 @@
 <template>
     <div class="excel-split">
         <div class="sec-top">
-            <el-alert style="width: 300px;margin: 0 10px 0 0;" title="功能介绍：将单个excel表格中选中的行跟列导出成一个新的excel。" type="info" show-icon close-text="知道了">
+            <el-alert style="width: 320px;margin: 0 10px 0 0;"
+                title="使用说明：1、导入excel表格；2、选择要导出的行和列；3、填写导出的文件名（非必填）；4、选择导出文件中的列宽度是否要自适应；5、点击“导出已选项”按钮。" type="info"
+                show-icon close-text="知道了">
             </el-alert>
             <div style="flex: auto;"><upload-excel-component :on-success="handleSuccess"
                     :before-upload="beforeUpload" /></div>
@@ -20,7 +22,9 @@
             </el-button>
         </div>
         <el-table ref="multipleTable" :data="originalList" :loading="listLoading" border stripe fit
-            highlight-current-row style="width: 100%;margin-top:20px;" @selection-change="handleSelectionChange">
+            highlight-current-row style="width: 100%;margin-top:20px;"
+            :header-cell-style="{ 'background': '#409EFF', 'color': 'white', 'text-align': 'center' }"
+            @selection-change="handleSelectionChange">
             <el-table-column v-if="originalList" fixed type="selection" align="center" />
             <el-table-column v-for="item of originalHeader.filter(item => selectedCols.includes(item))" :key="item"
                 :prop="item" :label="item" />
@@ -125,6 +129,7 @@ export default {
 .excel-split {
     .sec-top {
         display: flex;
+
         .el-alert__title {
             font-size: 16px;
         }

@@ -1,5 +1,9 @@
 <template>
   <div class="image-viewer">
+    <el-alert style="margin: 0 0 15px;"
+      title="使用说明：1、导入图片（支持png、jpeg、jpg、gif、bmp）；2、点击“编辑”按钮进入图片编辑模式；3、点击“确认”生成编辑后的新图片；4、点击“裁切”按钮确认图片的截取操作。" type="info"
+      show-icon close-text="知道了">
+    </el-alert>
     <div class="btn-grp">
       <el-button type="primary" size="small" @click="fuc_LoadImage">导入图片</el-button>
       <!-- <el-button type="primary" size="small" @click="fuc_showVideo">show video</el-button> -->
@@ -17,7 +21,6 @@
         <el-button type="primary" size="small" @click="fuc_Save">确定</el-button>
         <el-button type="primary" size="small" @click="fuc_CloseImageEditor">取消</el-button>
       </div>
-
     </div>
     <div id="imageViewer"></div>
   </div>
@@ -34,7 +37,7 @@ export default {
   },
   mounted() {
     let Width = document.body.clientWidth - 230 + 'px'
-    let Height = document.body.clientHeight - 170 + 'px'
+    let Height = document.body.clientHeight - 220 + 'px'
     var cfg = {
       ContainerId: "imageViewer",
       Width,

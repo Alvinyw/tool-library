@@ -1,26 +1,33 @@
 <template>
     <div class="img-to-base64">
-        <div class="sec-lt">
-            <input id="imageUpload" type="file" accept="image/png, image/jpeg, image/gif, image/jpg, image/svg+xml"
-                @change="onUploadChange" />
-            <p class="lable">原图（支持png、jpeg、jpg、svg、gif）:</p>
-            <div id="orignImage">
+        <el-alert style="margin: 0 0 15px;"
+            title="使用说明：1、选择上传图片文件（支持png、jpeg、jpg、gif、bmp、tiff）；2、填入压缩比例（支持填入0 - 1）；3、压缩后预览效果；4、下载压缩后的图片。" type="info"
+            show-icon close-text="知道了">
+        </el-alert>
+        <div class="main-ct">
+            <div class="sec-lt">
+                <input id="imageUpload" type="file" accept="image/png, image/jpeg, image/gif, image/jpg, image/tiff, image/bmp"
+                    @change="onUploadChange" />
+                <p class="lable">{{ imgOriginalInfo.type }}原图:</p>
+                <div id="orignImage">
+                </div>
             </div>
-        </div>
-        <div class="sec-rt">
-            <el-select v-model="currentValue" clear placeholder="请选择" style="margin: 0 15px 0 0;" @change="convertImg">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
-            </el-select>
-            <el-button type="primary" @click="downloadImg">下载</el-button>
-            <p class="lable">{{ options[currentValue].label }}图片:</p>
-            <div id="resultImage">
-            </div>
-            <div v-show="Number(currentValue) == 0 && base64File">
-                <el-button type="primary" size="mini" @click="handleCopy">点击拷贝</el-button>
-                <textarea id="copyInput" style="position: fixed; right: -1000px; opacity: 0;"></textarea>
-                <div class="base64-wrapper" @click="handleCopy" title="点击可以拷贝">
-                    {{ base64File }}
+            <div class="sec-rt">
+                <el-select v-model="currentValue" clear placeholder="请选择" style="margin: 0 15px 0 0;"
+                    @change="convertImg">
+                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                </el-select>
+                <el-button type="primary" @click="downloadImg">下载</el-button>
+                <p class="lable">{{ options[currentValue].label }}图片:</p>
+                <div id="resultImage">
+                </div>
+                <div v-show="Number(currentValue) == 0 && base64File">
+                    <el-button type="primary" size="mini" @click="handleCopy">点击拷贝</el-button>
+                    <textarea id="copyInput" style="position: fixed; right: -1000px; opacity: 0;"></textarea>
+                    <div class="base64-wrapper" @click="handleCopy" title="点击可以拷贝">
+                        {{ base64File }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -171,22 +178,22 @@ export default {
             const doc = new jsPDF(); // 默认是 A4纸，A4纸的尺寸是 210mm * 297mm（595px * 842px）
             const { type = 'PNG', width = 0, height = 0 } = this.imgOriginalInfo;
             const _rate = 210 / 595;
-            var _w = width*_rate;
-            var _h = height*_rate;
+            var _w = width * _rate;
+            var _h = height * _rate;
             var _c = 1;
-            if(_w > 210) {
+            if (_w > 210) {
                 _c = 210 / _w;
                 _w = 210;
                 _h = _c * _h;
             }
-            if(_h > 297) {
+            if (_h > 297) {
                 const _c2 = 297 / _h;
                 _h = 297;
-                _w =  _w * _c2;
+                _w = _w * _c2;
                 _c = _c * _c2;
             }
             // https://artskydj.github.io/jsPDF/docs/module-addImage.html#~addImage
-            doc.addImage(this.blobFile, type, (210 - _w)/2, (297 - _h)/2, _w, _h, '', _c)
+            doc.addImage(this.blobFile, type, (210 - _w) / 2, (297 - _h) / 2, _w, _h, '', _c)
             doc.save(`${(new Date()).getTime()}.pdf`);
         },
         // 下载 bas64 文本
@@ -226,55 +233,57 @@ export default {
 </script>
 <style lang="scss" scoped>
 .img-to-base64 {
-    display: flex;
-    justify-content: space-between;
+    .main-ct {
+        display: flex;
+        justify-content: space-between;
 
-    .lable {
-        margin: 10px 0;
-    }
+        .lable {
+            margin: 10px 0;
+        }
 
-    .sec-lt {
-        width: 50%;
-        min-height: 500px;
-        border-right: 1px solid #ddd;
+        .sec-lt {
+            width: 50%;
+            min-height: 500px;
+            border-right: 1px solid #ddd;
 
-        #imageUpload {
+            #imageUpload {
 
-            &::file-selector-button {
-                display: inline-block;
-                line-height: 1;
-                cursor: pointer;
-                border: 1px solid #409eff;
-                color: #fff;
-                background-color: #409eff;
-                text-align: center;
-                -webkit-box-sizing: border-box;
-                box-sizing: border-box;
-                outline: 0;
-                -webkit-transition: .1s;
-                transition: .1s;
-                font-weight: 500;
-                padding: 12px 20px;
-                font-size: 14px;
-                border-radius: 4px;
+                &::file-selector-button {
+                    display: inline-block;
+                    line-height: 1;
+                    cursor: pointer;
+                    border: 1px solid #409eff;
+                    color: #fff;
+                    background-color: #409eff;
+                    text-align: center;
+                    -webkit-box-sizing: border-box;
+                    box-sizing: border-box;
+                    outline: 0;
+                    -webkit-transition: .1s;
+                    transition: .1s;
+                    font-weight: 500;
+                    padding: 12px 20px;
+                    font-size: 14px;
+                    border-radius: 4px;
+                }
             }
         }
-    }
 
-    .sec-rt {
-        padding: 0 0 0 15px;
-        width: 50%;
+        .sec-rt {
+            padding: 0 0 0 15px;
+            width: 50%;
 
-        .base64-wrapper {
-            padding: 5px;
-            margin: 10px 0 0;
-            height: 120px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            cursor: pointer;
-            word-wrap: break-word;
-            word-break: normal;
-            overflow-y: scroll;
+            .base64-wrapper {
+                padding: 5px;
+                margin: 10px 0 0;
+                height: 120px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                cursor: pointer;
+                word-wrap: break-word;
+                word-break: normal;
+                overflow-y: scroll;
+            }
         }
     }
 }
