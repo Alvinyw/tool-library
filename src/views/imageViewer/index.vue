@@ -33,10 +33,12 @@ export default {
     };
   },
   mounted() {
+    let Width = document.body.clientWidth - 230 + 'px'
+    let Height = document.body.clientHeight - 170 + 'px'
     var cfg = {
       ContainerId: "imageViewer",
-      Width: "900px",
-      Height: "500px",
+      Width,
+      Height,
     };
     this.imageViewer = createImageViewer(cfg);
   },
