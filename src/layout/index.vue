@@ -63,6 +63,17 @@ Excel文件压缩
 </el-menu-item> -->
           </el-menu-item-group>
         </el-submenu>
+        <el-submenu index="5">
+          <template slot="title">
+            <i class="el-icon-printer"></i>
+            <span>PDF</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item index="PdfToImage" @click="goToPage('PdfToImage')">
+              PDF文件转图片
+            </el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
       </el-menu>
     </el-aside>
 

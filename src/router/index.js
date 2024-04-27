@@ -86,6 +86,14 @@ const router = new Router({
           name: 'excel文件压缩'
         },
       },
+      {
+        path: '/pdfToImage',
+        name: 'PdfToImage',
+        component: () => import( /* webpackChunkName: "pdf" */ '@/views/pdf/pdfToImage/index'),
+        meta: {
+          name: 'PDF文件转图片'
+        },
+      },
       ]
     },
     {
