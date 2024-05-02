@@ -5,41 +5,39 @@
                 title="使用说明：1、导入excel表格；2、填写导出的文件名（非必填）；3、选择导出的文件格式（支持'xlsx', 'csv', 'txt'）；4、点击“转换并导出”按钮。" type="info"
                 show-icon close-text="知道了">
             </el-alert>
-            <div style="flex: auto;"><upload-pdf-component :on-success="handleSuccess"
-                    :before-upload="beforeUpload" /></div>
+            <div style="flex: auto;"><upload-pdf-component :on-success="handleSuccess" :before-upload="beforeUpload" />
+            </div>
         </div>
-        <div style="margin:30px 0 20px">
-            <FilenameOption v-model="filename" />
-            <BookTypeOption v-model="bookType" />
-            <el-button :loading="downloadLoading" style="margin:0 0 0 30px" type="primary" icon="el-icon-document"
-                @click="handleDownload">
-                转换并导出
-            </el-button>
+        <div class="main-ct">
+            <div class="item" v-for="(item, index) in imagesList" :key="index">
+                <span class="num">{{ index + 1 }}</span>
+                <div class="tool"><i class="el-icon-download"></i><i class="el-icon-zoom-in" @click="onImageZoomIn(index)"></i></div>
+                <img :src="item.src" alt="image" />
+            </div>
         </div>
-        <el-table :data="originalList" :loading="listLoading" border stripe fit highlight-current-row
-            style="width: 100%;margin-top:20px;"
-            :header-cell-style="{ 'background': '#409EFF', 'color': 'white', 'text-align': 'center' }">
-            <el-table-column v-for="item of originalHeader" :key="item" :prop="item" :label="item" />
-        </el-table>
+        <el-dialog :title="`当前浏览的是第${selectedIndex + 1}页`" :visible.sync="dialogVisible" top="5vh" width="90%">
+            <img style="max-width: 100%;" :src="imagesList[selectedIndex] ? imagesList[selectedIndex].src : ''" alt="image" />
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">下载</el-button>
+                <el-button type="primary" @click="dialogVisible = false">取消</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
 <script>
+// 参考 https://juejin.cn/post/7284433532075524151
 import UploadPdfComponent from '../components/UploadPdf.vue'
-import FilenameOption from '../components/FilenameOption'
-import BookTypeOption from '../components/BookTypeOption'
 
 export default {
     name: 'PdfToImage',
-    components: { FilenameOption, BookTypeOption, UploadPdfComponent },
+    components: { UploadPdfComponent },
     data() {
         return {
-            originalList: null, // 原始表格数据
-            originalHeader: [], // 原始表格的表头
-            listLoading: false,
-            downloadLoading: false,
-            filename: '', // 导出文件名
-            bookType: 'xlsx' // 导出文件类型
+            imagesList: [], // pdf图片列表
+            imagesLoading: true,
+            dialogVisible: false,
+            selectedIndex: '',
         }
     },
     methods: {
@@ -54,33 +52,17 @@ export default {
             //     type: 'warning'
             // })
             // return false
-            this.listLoading = true;
+            this.imagesLoading = true;
             return true;
         },
-        handleSuccess({ results, header }) {
-            this.listLoading = false;
-            this.originalList = results
-            this.originalHeader = header
+        onImageZoomIn(idx){
+            this.dialogVisible = true;
+            this.selectedIndex = idx;
         },
-        // 导出表格
-        handleDownload() {
-            this.downloadLoading = true
-            import('@/vendor/Export2Excel').then(excel => {
-                // 格式化数据
-                const data = this.formatJson(this.originalHeader, this.originalList)
-                excel.export_json_to_excel({
-                    header: this.originalHeader,
-                    data,
-                    filename: this.filename,
-                    bookType: this.bookType
-                })
-                this.downloadLoading = false
-            })
+        handleSuccess(pdfImages) {
+            this.imagesList = pdfImages;
+            this.imagesLoading = false;
         },
-        // 格式化数据
-        formatJson(filterVal, jsonData) {
-            return jsonData.map(v => filterVal.map(j => v[j]))
-        }
     }
 }
 </script>
@@ -91,6 +73,65 @@ export default {
 
         .el-alert__title {
             font-size: 16px;
+        }
+    }
+
+    .main-ct {
+        display: flex;
+        flex-flow: wrap;
+        margin: 20px 0 0;
+        border: #eee 1px solid;
+        min-height: calc(100vh - 270px);
+        background-color: #fff;
+
+        .item {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 5px;
+            width: 200px;
+            height: 250px;
+            border: 1px solid #aaa;
+
+            .num {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 15px;
+                height: 20px;
+                line-height: 20px;
+                text-align: center;
+                font-size: 12px;
+                color: #000;
+                background-color: rgba($color: #aaa, $alpha: .3);
+            }
+
+            .tool {
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                height: 30px;
+                background-color: rgba($color: #aaa, $alpha: .3);
+
+                i {
+                    height: 30px;
+                    width: 30px;
+                    line-height: 30px;
+                    text-align: center;
+
+                    &:hover {
+                        cursor: pointer;
+                        background-color: rgba($color: #aaa, $alpha: .4);
+                    }
+                }
+            }
+
+            img {
+                max-width: 100%;
+                max-height: 100%;
+            }
         }
     }
 }

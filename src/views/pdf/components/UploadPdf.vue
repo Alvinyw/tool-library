@@ -1,6 +1,6 @@
 <template>
     <div>
-        <input ref="excel-upload-input" class="excel-upload-input" type="file" accept=".pdf" @change="handleClick">
+        <input ref="pdf-upload-input" class="pdf-upload-input" type="file" accept=".pdf" @change="handleClick">
         <div class="drop" @drop="handleDrop" @dragover="handleDragover" @dragenter="handleDragover">
             将pdf文件拖拽到框内，或者
             <el-button :loading="loading" style="margin-left:15px;" type="primary" @click="handleUpload">
@@ -31,22 +31,16 @@ export default {
         }
     },
     methods: {
-        generateData({ header, results }) {
-            this.excelData.header = header
-            this.excelData.results = results
-            this.onSuccess && this.onSuccess(this.excelData)
-        },
         handleDrop(e) {
             e.stopPropagation()
             e.preventDefault()
             if (this.loading) return
             const files = e.dataTransfer.files
             if (files.length !== 1) {
-                this.$message.error('Only support uploading one file!')
+                this.$message.error('只支持一次处理 1 个PDF文件!')
                 return
             }
             const rawFile = files[0] // only use files[0]
-
             this.upload(rawFile)
             e.stopPropagation()
             e.preventDefault()
@@ -57,7 +51,7 @@ export default {
             e.dataTransfer.dropEffect = 'copy'
         },
         handleUpload() {
-            this.$refs['excel-upload-input'].click()
+            this.$refs['pdf-upload-input'].click()
         },
         handleClick(e) {
             const files = e.target.files
@@ -66,7 +60,7 @@ export default {
             this.upload(rawFile)
         },
         upload(rawFile) {
-            this.$refs['excel-upload-input'].value = null // fix can't select the same excel
+            this.$refs['pdf-upload-input'].value = null // fix can't select the same excel
 
             if (!this.beforeUpload) {
                 this.readerData(rawFile)
@@ -81,30 +75,32 @@ export default {
             this.loading = true
             return new Promise((resolve, reject) => {
                 const reader = new FileReader()
-                console.log('fileInput file: ', rawFile);
                 reader.onload = e => {
                     const data = e.target.result
-                    console.log(data)
                     // 将文件对象转化为 Uint8Array 
                     var typedarray = new Uint8Array(data);
                     // 返回 PDF 加载任务 PDFDocumentLoadingTask
-                    console.log('loadingServerFile: ', typedarray);
-                    const loadingTask = pdfjsLib.getDocument(typedarray);
-                    // 开始加载 PDF，这里封装了一个函数
-                    this.loadPDFFile(loadingTask);
-                    this.loading = false
-                    resolve()
+                    try {
+                        const loadingTask = pdfjsLib.getDocument(typedarray);
+                        // 开始加载 PDF，这里封装了一个函数
+                        this.loadPDFFile(loadingTask);
+                        // this.loading = false
+                        resolve()
+                    } catch (error) {
+                        this.$message.error('pdf.js初始化失败!')
+                    }
                 }
                 reader.readAsArrayBuffer(rawFile)
             })
         },
         async loadPDFFile(loadingTask) {
             const pdf = await loadingTask.promise;
+            console.log('pdf: ', pdf);
             const numPages = pdf.numPages;
+            let _resultImages = [];
             for (let curPage = 1; curPage <= numPages; curPage++) {
-                console.log('loadingServerFile curPage: ', curPage);
                 const page = await pdf.getPage(curPage);
-
+                // console.log('page: ', page);
                 const scale = 1.5;
                 const viewport = page.getViewport({ scale });
                 // Support HiDPI-screens.
@@ -134,9 +130,9 @@ export default {
                     }
                     return acc;
                 }, []);
+                // console.log('imageNames: ', ops, imageNames);
                 for (const imageName of imageNames) {
-                    console.log('imageName: ', imageName);
-                    page.objs.get(imageName, (image) => {
+                    await page.objs.get(imageName, (image) => {
                         // console.log('image: ', image);
                         (async function () {
                             // https://stackoverflow.com/questions/52959839/convert-imagebitmap-to-blob/52959897#52959897
@@ -160,7 +156,9 @@ export default {
                             // get it back as a Blob
                             const blob = await canvas.convertToBlob();
 
-                            const img = document.body.appendChild(new Image());
+                            // const img = document.body.appendChild(new Image());
+                            const img = new Image();
+                            _resultImages.push(img);
                             img.width = width;
                             img.height = height;
                             img.src = URL.createObjectURL(blob);
@@ -168,13 +166,16 @@ export default {
                     });
                 }
             }
+            this.loading = false
+            this.onSuccess && this.onSuccess(_resultImages)
+            // console.log('resultImages: ', _resultImages);
         }
     }
 }
 </script>
 
 <style scoped>
-.excel-upload-input {
+.pdf-upload-input {
     display: none;
     z-index: -9999;
 }
@@ -191,4 +192,4 @@ export default {
     color: #bbb;
     position: relative;
 }
-</style>../../../vendor/pdfjs/pdf.js
+</style>
