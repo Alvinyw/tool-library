@@ -16,7 +16,7 @@
                 <img :src="item.src" alt="image" />
             </div>
         </div>
-        <el-dialog :title="`当前浏览的是第${selectedIndex + 1}页`" :visible.sync="dialogVisible" top="5vh" width="90%">
+        <el-dialog :title="`当前浏览的是第${selectedIndex + 1}页`" :visible.sync="dialogVisible" top="5vh" width="60%">
             <img style="max-width: 100%;" :src="imagesList[selectedIndex] ? imagesList[selectedIndex].src : ''" alt="image" />
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">下载</el-button>

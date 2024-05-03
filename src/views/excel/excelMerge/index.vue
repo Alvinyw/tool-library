@@ -2,8 +2,8 @@
     <div class="excel-split">
         <div class="sec-top">
             <el-alert style="width: 320px;margin: 0 10px 0 0;"
-                title="使用说明：1、导入要合并的excel文件；2、分别选择每个表格需要合并的行和列（默认全选）；3、填写导出的文件名（非必填）；4、选择列宽度是否要自适应；5、导出合并后的excel文件。" type="info"
-                show-icon close-text="知道了">
+                title="使用说明：1、导入要合并的excel文件；2、分别选择每个表格中需要合并的行和列（默认全选）；3、填写导出的文件名（非必填）；4、选择列宽度是否要自适应；5、导出合并后的excel文件。"
+                type="info" show-icon close-text="知道了">
             </el-alert>
             <div style="flex: auto;"><upload-excel-component :on-success="handleSuccess"
                     :before-upload="beforeUpload" /></div>
@@ -32,11 +32,8 @@
             </el-table>
         </div>
         <div style="margin:30px 0 0">
-            合并后的
             <FilenameOption v-model="mergedExcel.name" />
-            <AutoWidthOption v-model="autoWidth" />
-            <el-button :loading="downloadLoading" style="margin:0 0 0 30px" type="primary" icon="el-icon-document"
-                @click="handleDownload">
+            <el-button :loading="downloadLoading" type="primary" icon="el-icon-document" @click="handleDownload">
                 导出合并后的Excel
             </el-button>
         </div>
@@ -51,11 +48,10 @@
 <script>
 import UploadExcelComponent from '../components/UploadExcel.vue'
 import FilenameOption from '../components/FilenameOption'
-import AutoWidthOption from '../components/AutoWidthOption'
 
 export default {
     name: 'ExcelMerge',
-    components: { FilenameOption, AutoWidthOption, UploadExcelComponent },
+    components: { FilenameOption, UploadExcelComponent },
     data() {
         return {
             originalList: [], // 原始表格数据
@@ -65,7 +61,6 @@ export default {
             selectedCols: [], // 表格中选中的列
             downloadLoading: false,
             filename: '', // 导出文件名
-            autoWidth: true, // 是否自动宽度
         }
     },
     computed: {
@@ -74,10 +69,16 @@ export default {
             let _results = [];
             let _header = [];
             for (let index = 0; index < this.originalList.length; index++) {
-                _results = [..._results, ...(this.originalList[index].results.filter((r, idx) => this.originalList[index].selectedRows.includes(idx + 1)))]
-                _header = [..._header, ...(this.originalList[index].header.filter(c => this.originalList[index].selectedCols.includes(c)))]
+                const _selectedColsData = this.originalList[index].header.filter(c => this.originalList[index].selectedCols.includes(c))
+                const _selectedRowsData = this.originalList[index].results.filter((r, idx) => this.originalList[index].selectedRows.includes(idx + 1))
+                _header = [..._header, ..._selectedColsData]
+                for (let a = 0; a < _selectedRowsData.length; a++) {
+                    _results[a] = Object.assign(_results[a] ? _results[a] : {}, _selectedRowsData[a]);
+
+                }
+                // _results = [..._results, ..._selectedRowsData]
             }
-            // console.log(this.originalList, { name: _name, results: _results, header: _header })
+            console.log(this.originalList, { name: _name, results: _results, header: _header })
             return { name: _name, results: _results, header: _header };
         },
     },
@@ -146,7 +147,7 @@ export default {
                     header: header,
                     data,
                     filename: name,
-                    autoWidth: this.autoWidth
+                    autoWidth: true
                 })
                 this.downloadLoading = false
             })
