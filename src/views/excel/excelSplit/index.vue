@@ -23,7 +23,7 @@
         </div>
         <el-table ref="multipleTable" :data="originalList" :loading="listLoading" border stripe fit
             highlight-current-row style="width: 100%;margin-top:20px;"
-            :header-cell-style="{ 'background': '#409EFF', 'color': 'white', 'text-align': 'center' }"
+            :header-cell-style="{ 'background': '#66b1ff', 'color': 'white', 'text-align': 'center' }"
             @selection-change="handleSelectionChange">
             <el-table-column v-if="originalList" fixed type="selection" align="center" />
             <el-table-column v-for="item of originalHeader.filter(item => selectedCols.includes(item))" :key="item"

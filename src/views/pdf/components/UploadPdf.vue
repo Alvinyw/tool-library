@@ -130,7 +130,7 @@ export default {
                     }
                     return acc;
                 }, []);
-                // console.log('imageNames: ', ops, imageNames);
+                console.log('imageNames: ', ops, imageNames);
                 for (const imageName of imageNames) {
                     await page.objs.get(imageName, (image) => {
                         // console.log('image: ', image);

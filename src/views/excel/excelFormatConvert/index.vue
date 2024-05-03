@@ -18,7 +18,7 @@
         </div>
         <el-table :data="originalList" :loading="listLoading" border stripe fit highlight-current-row
             style="width: 100%;margin-top:20px;"
-            :header-cell-style="{ 'background': '#409EFF', 'color': 'white', 'text-align': 'center' }">
+            :header-cell-style="{ 'background': '#66b1ff', 'color': 'white', 'text-align': 'center' }">
             <el-table-column v-for="item of originalHeader" :key="item" :prop="item" :label="item" />
         </el-table>
     </div>
