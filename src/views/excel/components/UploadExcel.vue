@@ -24,12 +24,14 @@ export default {
             loading: false,
             excelData: {
                 header: null,
-                results: null
+                results: null,
+                name: null
             }
         }
     },
     methods: {
-        generateData({ header, results }) {
+        generateData({ name, header, results }) {
+            this.excelData.name = name
             this.excelData.header = header
             this.excelData.results = results
             this.onSuccess && this.onSuccess(this.excelData)
@@ -40,13 +42,13 @@ export default {
             if (this.loading) return
             const files = e.dataTransfer.files
             if (files.length !== 1) {
-                this.$message.error('Only support uploading one file!')
+                this.$message.error('只支持一次性上传一个Excel文件!')
                 return
             }
             const rawFile = files[0] // only use files[0]
 
             if (!this.isExcel(rawFile)) {
-                this.$message.error('Only supports upload .xlsx, .xls, .csv suffix files')
+                this.$message.error('只支持上传 .xlsx, .xls, .csv 格式文件！')
                 return false
             }
             this.upload(rawFile)
@@ -90,7 +92,9 @@ export default {
                     const worksheet = workbook.Sheets[firstSheetName]
                     const header = this.getHeaderRow(worksheet)
                     const results = XLSX.utils.sheet_to_json(worksheet)
-                    this.generateData({ header, results })
+                    const { name } = rawFile;
+                    // console.log('========rawFile, data, workbook, firstSheetName, worksheet, header, results========',rawFile, data, workbook, firstSheetName, worksheet, header, results)
+                    this.generateData({ name, header, results })
                     this.loading = false
                     resolve()
                 }

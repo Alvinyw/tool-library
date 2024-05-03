@@ -71,6 +71,14 @@ const router = new Router({
         },
       },
       {
+        path: '/excelMerge',
+        name: 'ExcelMerge',
+        component: () => import( /* webpackChunkName: "excel" */ '@/views/excel/excelMerge/index'),
+        meta: {
+          name: 'excel文件合并'
+        },
+      },
+      {
         path: '/excelFormatConvert',
         name: 'ExcelFormatConvert',
         component: () => import( /* webpackChunkName: "excel" */ '@/views/excel/excelFormatConvert/index'),

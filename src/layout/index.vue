@@ -43,15 +43,16 @@
             <span>Excel</span>
           </template>
           <el-menu-item-group>
-            <el-menu-item index="ExcelFormatConvert" @click="goToPage('ExcelFormatConvert')">
-              Excel格式转换
-            </el-menu-item>
             <el-menu-item index="ExcelSplit" @click="goToPage('ExcelSplit')">
               Excel拆分（行跟列）
             </el-menu-item>
-            <!-- <el-menu-item index="" @click="goToPage('ExcelSplit')">
-Excel合并（行跟列）
-</el-menu-item>
+            <el-menu-item index="" @click="goToPage('ExcelMerge')">
+              Excel合并（行跟列）
+            </el-menu-item>
+            <el-menu-item index="ExcelFormatConvert" @click="goToPage('ExcelFormatConvert')">
+              Excel格式转换
+            </el-menu-item>
+            <!-- 
 <el-menu-item index="" @click="goToPage('ExcelSplit')">
 Excel拆分（Sheet页）
 </el-menu-item>
