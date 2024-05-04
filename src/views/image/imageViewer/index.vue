@@ -1,7 +1,7 @@
 <template>
   <div class="image-viewer">
     <el-alert style="margin: 0 0 15px;"
-      title="使用说明：1、导入图片（支持png、jpeg、jpg、gif、bmp）；2、点击“编辑”按钮进入图片编辑模式；3、点击“确认”生成编辑后的新图片；4、点击“裁切”按钮确认图片的截取操作。" type="info"
+      title="使用说明：1、导入图片（支持png、jpeg、jpg、gif、bmp）；2、点击“编辑”按钮进入图片编辑模式；3、点击“裁切”按钮确认图片的截取操作；4、点击“确认”生成编辑后的新图片。" type="info"
       show-icon close-text="知道了">
     </el-alert>
     <div class="btn-grp">

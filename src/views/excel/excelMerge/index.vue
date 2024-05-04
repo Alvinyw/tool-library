@@ -2,7 +2,7 @@
     <div class="excel-split">
         <div class="sec-top">
             <el-alert style="width: 320px;margin: 0 10px 0 0;"
-                title="使用说明：1、导入要合并的excel文件；2、分别选择每个表格中需要合并的行和列（默认全选）；3、填写导出的文件名（非必填）；4、选择列宽度是否要自适应；5、导出合并后的excel文件。"
+                title="使用说明：1、导入要合并的excel文件；2、分别选择每个表格中需要合并的行和列（默认全选）；3、选择合并方式，默认简单合并；4、填写导出的文件名（非必填）；5、导出合并后的excel文件。"
                 type="info" show-icon close-text="知道了">
             </el-alert>
             <div style="flex: auto;"><upload-excel-component :on-success="handleSuccess"
