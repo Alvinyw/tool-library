@@ -32,6 +32,10 @@
             </el-table>
         </div>
         <div style="margin:30px 0 0">
+            合并方式：<el-select v-model="mergeType" clear placeholder="请选择" style="margin: 0 15px 0 0;">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                </el-option>
+            </el-select>
             <FilenameOption v-model="mergedExcel.name" />
             <el-button :loading="downloadLoading" type="primary" icon="el-icon-document" @click="handleDownload">
                 导出合并后的Excel
@@ -61,6 +65,17 @@ export default {
             selectedCols: [], // 表格中选中的列
             downloadLoading: false,
             filename: '', // 导出文件名
+            options: [{
+                value: '0',
+                label: '简单合并'
+            }, {
+                value: '1',
+                label: '去除重复列'
+            }, {
+                value: '2',
+                label: '合并重复列'
+            }],
+            mergeType: '0'
         }
     },
     computed: {
@@ -69,12 +84,47 @@ export default {
             let _results = [];
             let _header = [];
             for (let index = 0; index < this.originalList.length; index++) {
-                const _selectedColsData = this.originalList[index].header.filter(c => this.originalList[index].selectedCols.includes(c))
-                const _selectedRowsData = this.originalList[index].results.filter((r, idx) => this.originalList[index].selectedRows.includes(idx + 1))
-                _header = [..._header, ..._selectedColsData]
-                for (let a = 0; a < _selectedRowsData.length; a++) {
-                    _results[a] = Object.assign(_results[a] ? _results[a] : {}, _selectedRowsData[a]);
-
+                const _curName = this.originalList[index].name;
+                const _selectedColsData = [...this.originalList[index].header.filter(c => this.originalList[index].selectedCols.includes(c))]
+                const _selectedRowsData = JSON.parse(JSON.stringify(this.originalList[index].results.filter((r, idx) => this.originalList[index].selectedRows.includes(idx + 1))))
+                if (this.mergeType === '1') {
+                    // 去除重复列
+                    _header = Array.from(new Set([..._header, ..._selectedColsData]))
+                    for (let a = 0; a < _selectedRowsData.length; a++) {
+                        _results[a] = Object.assign(_results[a] ? _results[a] : {}, _selectedRowsData[a]);
+                    }
+                } else if (this.mergeType === '2') {
+                    // 合并重复列
+                    _header = Array.from(new Set([..._header, ..._selectedColsData]))
+                    for (let a = 0; a < _selectedRowsData.length; a++) {
+                        _results[a] = Object.assign(_results[a] ? _results[a] : {}, _selectedRowsData[a]);
+                    }
+                } else {
+                    // 简单合并
+                    _header = [..._header, ..._selectedColsData]
+                    // const _len = _results[0].length
+                    for (let a = 0; a < _selectedRowsData.length; a++) {
+                        if (!_results[a]) {
+                            _results[a] = Object.assign({}, _selectedRowsData[a]);
+                        } else {
+                            for (let key in _selectedRowsData[a]) {
+                                // 如果存在相同列名，则重命名
+                                if (_results[a][key]) {
+                                    // 重命名行
+                                    const _temp = _selectedRowsData[a][key];
+                                    delete _selectedRowsData[a][key];
+                                    _selectedRowsData[a][key + '[' + _curName.split(".")[0] + ']'] = _temp;
+                                    // 重命名列
+                                    const _idx = _header.indexOf(key, _header.indexOf(key) + 1);
+                                    if (_idx > -1) {
+                                        _header[_idx] = key + '[' + _curName.split(".")[0] + ']';
+                                    }
+                                }
+                            }
+                            _results[a] = Object.assign(_results[a], _selectedRowsData[a]);
+                        }
+                        // _results[a] = Object.assign(_results[a] ? _results[a] : {}, _selectedRowsData[a]);
+                    }
                 }
                 // _results = [..._results, ..._selectedRowsData]
             }
