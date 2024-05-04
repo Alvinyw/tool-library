@@ -41,8 +41,12 @@
                 导出合并后的Excel
             </el-button>
         </div>
+        <el-alert style="margin: 5px 0;"
+                :title="mergeTypeTip[mergeType]"
+                type="info" show-icon close-text="知道了">
+            </el-alert>
         <el-table :data="mergedExcel.results" :loading="listLoading" border stripe fit highlight-current-row
-            style="width: 100%;margin-top:20px;"
+            style="width: 100%;"
             :header-cell-style="{ 'background': '#66b1ff', 'color': 'white', 'text-align': 'center' }">
             <el-table-column v-for="col of mergedExcel.header" :key="col" :prop="col" :label="col" />
         </el-table>
@@ -75,7 +79,12 @@ export default {
                 value: '2',
                 label: '合并重复列'
             }],
-            mergeType: '0'
+            mergeType: '0',
+            mergeTypeTip: {
+                '0': '简单合并：保留所有文件中的重复列，并在重复的列名后添加文件名！',
+                '1': '去除重复列：如有重复列，以最后一个文件的列内容为准！',
+                '2': '合并重复列：列名不变，将所有文件中重复列的内容合并到一个列中！',
+            }
         }
     },
     computed: {
@@ -85,8 +94,16 @@ export default {
             let _header = [];
             for (let index = 0; index < this.originalList.length; index++) {
                 const _curName = this.originalList[index].name;
+                // 选中的列
                 const _selectedColsData = [...this.originalList[index].header.filter(c => this.originalList[index].selectedCols.includes(c))]
-                const _selectedRowsData = JSON.parse(JSON.stringify(this.originalList[index].results.filter((r, idx) => this.originalList[index].selectedRows.includes(idx + 1))))
+                // 根据选中的列，过滤选中的行字段
+                const _TempSelectedRowsData = this.originalList[index].results.filter((r, idx) => this.originalList[index].selectedRows.includes(idx + 1))
+                const _selectedRowsData = JSON.parse(JSON.stringify(_TempSelectedRowsData)).map(obj => {
+                    for (let key in obj) {
+                        if (!_selectedColsData.includes(key)) delete obj[key];
+                    }
+                    return obj;
+                })
                 if (this.mergeType === '1') {
                     // 去除重复列
                     _header = Array.from(new Set([..._header, ..._selectedColsData]))
@@ -97,16 +114,24 @@ export default {
                     // 合并重复列
                     _header = Array.from(new Set([..._header, ..._selectedColsData]))
                     for (let a = 0; a < _selectedRowsData.length; a++) {
+                        if (_results[a]) {
+                            for (let key in _selectedRowsData[a]) {
+                                // 如果存在相同列名，则合并列内容
+                                if (_results[a][key]) {
+                                    // 重命名行
+                                    const _temp = _selectedRowsData[a][key];
+                                    delete _selectedRowsData[a][key];
+                                    _results[a][key] += _temp
+                                }
+                            }
+                        }
                         _results[a] = Object.assign(_results[a] ? _results[a] : {}, _selectedRowsData[a]);
                     }
                 } else {
                     // 简单合并
                     _header = [..._header, ..._selectedColsData]
-                    // const _len = _results[0].length
                     for (let a = 0; a < _selectedRowsData.length; a++) {
-                        if (!_results[a]) {
-                            _results[a] = Object.assign({}, _selectedRowsData[a]);
-                        } else {
+                        if (_results[a]) {
                             for (let key in _selectedRowsData[a]) {
                                 // 如果存在相同列名，则重命名
                                 if (_results[a][key]) {
@@ -121,14 +146,12 @@ export default {
                                     }
                                 }
                             }
-                            _results[a] = Object.assign(_results[a], _selectedRowsData[a]);
                         }
-                        // _results[a] = Object.assign(_results[a] ? _results[a] : {}, _selectedRowsData[a]);
+                        _results[a] = Object.assign(_results[a] ? _results[a] : {}, _selectedRowsData[a]);
                     }
                 }
-                // _results = [..._results, ..._selectedRowsData]
             }
-            console.log(this.originalList, { name: _name, results: _results, header: _header })
+            // console.log(this.originalList, { name: _name, results: _results, header: _header })
             return { name: _name, results: _results, header: _header };
         },
     },
