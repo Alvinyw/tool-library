@@ -109,12 +109,12 @@ export default {
                 position: absolute;
                 left: 0;
                 top: 0;
-                width: 15px;
-                height: 20px;
-                line-height: 20px;
+                display: inline-block;
+                padding: 2px 5px;
                 text-align: center;
                 font-size: 12px;
                 color: #000;
+                font-weight: bold;
                 background-color: rgba($color: #aaa, $alpha: .3);
             }
 
