@@ -170,6 +170,7 @@ export default {
     color: #aaa;
     background-color: #fff;
     border-right: solid 1px #aaa;
+    overflow-x: hidden;
 
     .el-menu {
       border: none;
