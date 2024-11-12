@@ -6,17 +6,6 @@
           <i class="el-icon-menu"></i>
           <span slot="title">首页</span>
         </el-menu-item>
-        <el-submenu index="2">
-          <template slot="title">
-            <i class="el-icon-edit-outline"></i>
-            <span>文本</span>
-          </template>
-          <el-menu-item-group>
-            <el-menu-item index="RichText" @click="goToPage('RichText')">
-              富文本编辑器
-            </el-menu-item>
-          </el-menu-item-group>
-        </el-submenu>
         <el-submenu index="3">
           <template slot="title">
             <i class="el-icon-picture-outline"></i>
@@ -71,7 +60,18 @@ Excel文件压缩
           </template>
           <el-menu-item-group>
             <el-menu-item index="PdfToImage" @click="goToPage('PdfToImage')">
-              PDF文件转图片
+              PDF编辑
+            </el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
+        <el-submenu index="2">
+          <template slot="title">
+            <i class="el-icon-edit-outline"></i>
+            <span>文本</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item index="RichText" @click="goToPage('RichText')">
+              富文本编辑器
             </el-menu-item>
           </el-menu-item-group>
         </el-submenu>
