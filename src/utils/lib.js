@@ -370,14 +370,14 @@ export function downloadPdf(blobFile = '', type = 'PNG', width = 0, height = 0) 
 	var _w = width * _rate;
 	var _h = height * _rate;
 	var _c = 1;
-	if (_w > 210) {
-		_c = 210 / _w;
-		_w = 210;
+	if (_w > 210*0.9) {
+		_c = 210*0.9 / _w;
+		_w = 210*0.9;
 		_h = _c * _h;
 	}
-	if (_h > 297) {
-		const _c2 = 297 / _h;
-		_h = 297;
+	if (_h > 297*0.9) {
+		const _c2 = 297*0.9 / _h;
+		_h = 297*0.9;
 		_w = _w * _c2;
 		_c = _c * _c2;
 	}
