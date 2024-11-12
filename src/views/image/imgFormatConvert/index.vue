@@ -155,23 +155,7 @@ export default {
                 const { type = 'PNG', width = 0, height = 0 } = this.imgOriginalInfo;
                 return this.$lib.downloadPdf(this.blobFile, type, width, height)
             }
-            var a = document.createElement('a');
-            a.target = '_blank';
-            var blob = this.blobFile;
-            a.download = (new Date()).getTime() + `.${this.options[this.currentValue].label}`;
-            var objUrl = blob;
-            a.href = objUrl;
-            var ev = new MouseEvent('click', {
-                "view": window,
-                "bubbles": true,
-                "cancelable": false
-            });
-            a.dispatchEvent(ev);
-            //a.click();
-            setTimeout(function () {
-                URL.revokeObjectURL(objUrl);
-            }, 10000);
-
+            this.$lib.downloadImg(this.blobFile, this.options[this.currentValue].label)
         },
         // 复制 base64 文本
         handleCopy() {

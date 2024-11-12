@@ -364,6 +364,7 @@ export function getBlobFromAnyImgData(imgData, callback) {
  * @param { height } 图片高度
  */
 export function downloadPdf(blobFile = '', type = 'PNG', width = 0, height = 0) {
+	if (!blobFile) return;
 	const doc = new jsPDF(); // 默认是 A4纸，A4纸的尺寸是 210mm * 297mm（595px * 842px）
 	const _rate = 210 / 595;
 	var _w = width * _rate;
@@ -390,6 +391,7 @@ export function downloadPdf(blobFile = '', type = 'PNG', width = 0, height = 0) 
  * @param { base64File } base64格式的图片源
  * */
 export function downloadBase64ToTxt(base64File = '') {
+	if (!base64File) return;
 	// dada 表示要转换的字符串数据，type 表示要转换的数据格式
 	const blob = new Blob([base64File], {
 		type: "text/plain;charset=utf-8"
@@ -408,6 +410,31 @@ export function downloadBase64ToTxt(base64File = '') {
 	// 释放一个之前已经存在的、通过调用 URL.createObjectURL() 创建的 URL 对象。
 	// 当你结束使用某个 URL 对象之后，应该通过调用这个方法来让浏览器知道不用在内存中继续保留对这个文件的引用了。
 	URL.revokeObjectURL(objectURL)
+}
+
+/**
+ * 将blob格式的图片下载为图片
+ * @param { blobFile } blob 图片数据
+ * @param { type } 图片类型
+*/
+export function downloadImg(blobFile = '', type = 'PNG') {
+	if (!blobFile) return;
+	var a = document.createElement('a');
+	a.target = '_blank';
+	a.download = (new Date()).getTime() + `.${type}`;
+	var objUrl = blobFile;
+	a.href = objUrl;
+	var ev = new MouseEvent('click', {
+		"view": window,
+		"bubbles": true,
+		"cancelable": false
+	});
+	a.dispatchEvent(ev);
+	//a.click();
+	setTimeout(function () {
+		URL.revokeObjectURL(objUrl);
+	}, 10000);
+
 }
 
 /**
