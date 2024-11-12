@@ -100,7 +100,7 @@ export default {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 5px;
+            margin: 10px;
             width: 200px;
             height: 250px;
             border: 1px solid #aaa;
@@ -110,9 +110,9 @@ export default {
                 left: 0;
                 top: 0;
                 display: inline-block;
-                padding: 2px 5px;
+                padding: 5px 8px;
                 text-align: center;
-                font-size: 12px;
+                font-size: 14px;
                 color: #000;
                 font-weight: bold;
                 background-color: rgba($color: #aaa, $alpha: .3);
@@ -123,13 +123,14 @@ export default {
                 left: 0;
                 bottom: 0;
                 width: 100%;
-                height: 30px;
+                height: 35px;
                 background-color: rgba($color: #aaa, $alpha: .3);
 
                 i {
-                    height: 30px;
-                    width: 30px;
-                    line-height: 30px;
+                    height: 35px;
+                    width: 35px;
+                    line-height: 35px;
+                    font-size: 20px;
                     text-align: center;
 
                     &:hover {

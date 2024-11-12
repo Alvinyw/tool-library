@@ -2,7 +2,7 @@
   <div class="dashboard-index">
     <!-- <img src="../../assets/images/img-dashboard.jpeg"/> -->
     <h1>效率工具库</h1>
-    <p style="margin: 30px 0 0;">若对现有工具的使用有疑问/建议、有其他的工具需求或想一起开发，可以联系：</p>
+    <p style="margin: 30px 0 0;">技术支持请联系：</p>
     <p style="margin: 20px 0 0;">维护人：总行/科技部/开发中心/廖益文</p>
     <p>电话：18879726585</p>
     <p>邮箱：liaoyiwen@bankgz.com</p>
