@@ -1,3 +1,5 @@
+import { jsPDF } from "jspdf"; // https://artskydj.github.io/jsPDF/docs/index.html
+
 // 比较 a、b 是否相等
 export function isObjEqual(a, b) {
 	return JSON.stringify(a) === JSON.stringify(b)
@@ -152,7 +154,6 @@ export function importJSON(callSuccess, callFail) {
 	// 触发上传文件
 	input.click()
 }
-
 
 /** 
  * 获取元素尺寸
@@ -353,6 +354,35 @@ export function getBlobFromAnyImgData(imgData, callback) {
 		callback(null);
 	}
 
+}
+
+/**
+ * 将图片下载为 pdf
+ * @param { blobFile } blob 图片数据
+ * @param { type } 图片类型
+ * @param { width } 图片宽度
+ * @param { height } 图片高度
+ */
+export function downloadPdf(blobFile = '', type = 'PNG', width = 0, height = 0) {
+	const doc = new jsPDF(); // 默认是 A4纸，A4纸的尺寸是 210mm * 297mm（595px * 842px）
+	const _rate = 210 / 595;
+	var _w = width * _rate;
+	var _h = height * _rate;
+	var _c = 1;
+	if (_w > 210) {
+		_c = 210 / _w;
+		_w = 210;
+		_h = _c * _h;
+	}
+	if (_h > 297) {
+		const _c2 = 297 / _h;
+		_h = 297;
+		_w = _w * _c2;
+		_c = _c * _c2;
+	}
+	// https://artskydj.github.io/jsPDF/docs/module-addImage.html#~addImage
+	doc.addImage(blobFile, type, (210 - _w) / 2, (297 - _h) / 2, _w, _h, '', _c)
+	doc.save(`${(new Date()).getTime()}.pdf`);
 }
 
 /**

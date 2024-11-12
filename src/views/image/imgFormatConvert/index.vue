@@ -34,7 +34,6 @@
     </div>
 </template>
 <script>
-import { jsPDF } from "jspdf"; // https://artskydj.github.io/jsPDF/docs/index.html
 
 export default {
     name: "ImgFormatConvert",
@@ -153,7 +152,8 @@ export default {
                 return this.downloadBase64ToTxt()
             }
             if (Number(this.currentValue) == 4) {
-                return this.downloadPdf()
+                const { type = 'PNG', width = 0, height = 0 } = this.imgOriginalInfo;
+                return this.$lib.downloadPdf(this.blobFile, type, width, height)
             }
             var a = document.createElement('a');
             a.target = '_blank';
@@ -172,29 +172,6 @@ export default {
                 URL.revokeObjectURL(objUrl);
             }, 10000);
 
-        },
-        // pdf下载
-        downloadPdf() {
-            const doc = new jsPDF(); // 默认是 A4纸，A4纸的尺寸是 210mm * 297mm（595px * 842px）
-            const { type = 'PNG', width = 0, height = 0 } = this.imgOriginalInfo;
-            const _rate = 210 / 595;
-            var _w = width * _rate;
-            var _h = height * _rate;
-            var _c = 1;
-            if (_w > 210) {
-                _c = 210 / _w;
-                _w = 210;
-                _h = _c * _h;
-            }
-            if (_h > 297) {
-                const _c2 = 297 / _h;
-                _h = 297;
-                _w = _w * _c2;
-                _c = _c * _c2;
-            }
-            // https://artskydj.github.io/jsPDF/docs/module-addImage.html#~addImage
-            doc.addImage(this.blobFile, type, (210 - _w) / 2, (297 - _h) / 2, _w, _h, '', _c)
-            doc.save(`${(new Date()).getTime()}.pdf`);
         },
         // 下载 bas64 文本
         downloadBase64ToTxt() {
