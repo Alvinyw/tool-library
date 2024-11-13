@@ -421,8 +421,8 @@ export async function downloadPdf(blobFileAry = [], type = 'PNG') {
 	// 当分辨率是72像素/英寸时，A4纸长宽像素分别是842×595;
 	// 当分辨率是150像素/英寸时，A4纸长宽像素分别是1754×1240;
 	// 当分辨率是300像素/英寸时，A4纸长宽像素分别是3508×2479。
-	const maxHeight = 1754;
-	const maxWidth = 1240;
+	const maxHeight = 842;
+	const maxWidth = 595;
 	const _rate = maxWidth / maxHeight;
 	const doc = new jsPDF('p', 'px', [maxWidth, maxHeight]);
 

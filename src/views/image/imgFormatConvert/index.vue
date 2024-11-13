@@ -152,8 +152,8 @@ export default {
                 return this.$lib.downloadBase64ToTxt(this.base64File)
             }
             if (Number(this.currentValue) == 4) {
-                const { type = 'PNG', width = 0, height = 0 } = this.imgOriginalInfo;
-                return this.$lib.downloadPdf([this.blobFile], type, width, height)
+                const { type = 'PNG' } = this.imgOriginalInfo;
+                return this.$lib.downloadPdf([this.blobFile], type)
             }
             this.$lib.downloadImg(this.blobFile, this.options[this.currentValue].label)
         },
