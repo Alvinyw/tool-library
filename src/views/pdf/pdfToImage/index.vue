@@ -1,20 +1,20 @@
 <template>
     <div class="excel-format-convert">
         <div class="sec-top">
-            <el-alert style="width: 320px;margin: 0 10px 0 0;"
-                title="使用场景：1、将PDF导出为图片；2、调整PDF中的页面位置；3、将图片插入PDF中；4、删除PDF中的页面。" type="info" show-icon close-text="知道了">
+            <el-alert style="width: 30%;margin: 0 10px 0 0;"
+                title="使用场景：1、将PDF导出为图片；2、调整PDF中的页面位置；3、将图片插入PDF中；4、删除PDF中的页面；5、合并多个PDF文件。" type="info"
+                close-text="知道了">
             </el-alert>
             <div style="flex: auto;"><upload-pdf-component :on-success="handleSuccess" :before-upload="beforeUpload" />
             </div>
         </div>
         <div class="tool-grp">
-            <el-upload class="upload-image" action="#3" :auto-upload="false" multiple :show-file-list="false" accept="image/*"
-                :file-list="fileList" :on-change="handleImageUpload">
+            <el-upload class="upload-image" action="#3" :auto-upload="false" multiple :show-file-list="false"
+                accept="image/*" :file-list="fileList" :on-change="handleImageUpload">
                 <el-button>上传图片</el-button>
             </el-upload>
             <el-button style="margin:0 10px" @click="handleDeleteAll">删除全部</el-button>
-            <el-button :loading="downloadLoading" type="primary" icon="el-icon-document"
-                @click="handleExportPDF">
+            <el-button :loading="downloadLoading" type="primary" icon="el-icon-document" @click="handleExportPDF">
                 导出为PDF
             </el-button>
         </div>
@@ -26,10 +26,10 @@
                     <el-image style="width: 100%; height: 100%" :src="item.src" :preview-src-list="[item.src]">
                     </el-image>
                     <span class="num">{{ index + 1 }}</span>
-                    <div class="tool"><i class="el-icon-download" @click="handleImageDownload(index)" title="下载图片"></i><i
-                            class="el-icon-full-screen" @click="handleImageZoomIn(index)" title="全屏查看图片"></i><i
-                            class="el-icon-delete" @click="handleImageDelete(index)" title="删除图片"></i></div>
-                    <!-- <img :src="item.src" alt="image" /> -->
+                    <div class="tool"><i class="el-icon-download" @click="handleImageDownload(index)"
+                            title="下载图片"></i><i class="el-icon-full-screen" @click="handleImageZoomIn(index)"
+                            title="全屏查看图片"></i><i class="el-icon-delete" @click="handleImageDelete(index)"
+                            title="删除图片"></i></div>
                 </div>
             </div>
         </div>
@@ -99,7 +99,8 @@ export default {
             this.selectedIndex = idx;
         },
         handleSuccess(pdfImages) {
-            this.imagesList = pdfImages;
+            if (pdfImages.length < 1) return;
+            this.imagesList = [...this.imagesList, ...pdfImages];
             this.imagesLoading = false;
         },
         handleImageDownload(index) {
@@ -107,13 +108,20 @@ export default {
             this.$lib.downloadImg(this.imagesList[index].src)
         },
         handleExportPDF() {
+            if (!this.imagesList.length) {
+                return this.$message({ message: '请先上传PDF文件', type: 'warning' });
+            }
             this.downloadLoading = true;
             const _temp = [];
             this.imagesList.forEach((item) => {
                 _temp.push(item.src);
             })
-            this.$lib.downloadPdf(_temp, 'PNG')
-            this.downloadLoading = false;
+            setTimeout(() => {
+                this.$lib.downloadPdf(_temp, 'PNG', () => {
+                    this.downloadLoading = false;
+                    this.$message({ message: 'PDF导出成功', type: 'success' });
+                })
+            }, 100);
         },
         handleImageDelete(index) {
             this.imagesList.splice(index, 1);

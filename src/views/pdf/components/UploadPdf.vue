@@ -58,6 +58,7 @@ export default {
             const rawFile = files[0] // only use files[0]
             if (!rawFile) return
             this.upload(rawFile)
+            e.target.value = null
         },
         upload(rawFile) {
             this.$refs['pdf-upload-input'].value = null // fix can't select the same excel

@@ -60,7 +60,7 @@ Excel文件压缩
           </template>
           <el-menu-item-group>
             <el-menu-item index="PdfToImage" @click="goToPage('PdfToImage')">
-              PDF编辑
+              PDF拆并
             </el-menu-item>
           </el-menu-item-group>
         </el-submenu>

@@ -414,7 +414,7 @@ export async function getMaxWidthHeight(imagesSrcList = []) {
  * 参考文章：https://www.jianshu.com/p/43d69b8ff8e8
  * 参考文章：https://artskydj.github.io/jsPDF/docs/module-addImage.html#~addImage
  */
-export async function downloadPdf(blobFileAry = [], type = 'PNG') {
+export async function downloadPdf(blobFileAry = [], type = 'PNG', callBackback = () => { }) {
 	if (!blobFileAry || !Array.isArray(blobFileAry)) return;
 	// const { maxWidth, maxHeight } = await getMaxWidthHeight(blobFileAry)
 	// A4纸的尺寸是210毫米×297毫米
@@ -450,6 +450,7 @@ export async function downloadPdf(blobFileAry = [], type = 'PNG') {
 	const targetPage = doc.internal.getNumberOfPages()
 	doc.deletePage(targetPage)
 	doc.save(`${(new Date()).getTime()}.pdf`);
+	callBackback();
 }
 
 /**
