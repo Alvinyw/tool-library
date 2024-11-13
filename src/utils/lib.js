@@ -357,38 +357,90 @@ export function getBlobFromAnyImgData(imgData, callback) {
 }
 
 /**
+ * 获取图片的宽高
+ * @param { src } 图片地址
+*/
+export function getImgWidthHeight(src) {
+	return new Promise((resolve, reject) => {
+		const img = new Image()
+		img.src = src
+		// 图片是否有缓存 如果有缓存可以直接拿 如果没有缓存 需要从onload拿
+		if (img.complete) {
+			const { width, height } = img
+			resolve({
+				width,
+				height,
+			})
+		} else {
+			img.onload = function () {
+				const { width, height } = img
+				resolve({
+					width,
+					height,
+				})
+			}
+		}
+	})
+}
+
+/**
+ * 获取图片最大宽度和高度
+ * @param { imagesSrcList } 图片地址列表
+*/
+export async function getMaxWidthHeight(imagesSrcList = []) {
+	if (!imagesSrcList || !Array.isArray(imagesSrcList)) return;
+	const widthList = []
+	const heightList = []
+	let maxHeight = 0
+	let maxWidth = 0
+	for (let i = 0; i < imagesSrcList.length; i++) {
+		const { width, height } = await getImgWidthHeight(imagesSrcList[i])
+		widthList.push(width)
+		heightList.push(height)
+	}
+	// 把数组变成升序然后倒过来取第一个就是拿最大宽度
+	maxWidth = widthList.sort().reverse()[0]
+	maxHeight = heightList.sort().reverse()[0]
+	return {
+		maxWidth,
+		maxHeight,
+	}
+}
+
+/**
  * 将图片下载为 pdf
- * @param { blobFile } blob 图片数据
+ * @param { blobFileAry } 图片地址列表
  * @param { type } 图片类型
- * @param { width } 图片宽度
- * @param { height } 图片高度
  */
-export function downloadPdf(blobFileAry = [], type = 'PNG', width = 0, height = 0) {
+export async function downloadPdf(blobFileAry = [], type = 'PNG') {
 	if (!blobFileAry || !Array.isArray(blobFileAry)) return;
-	const doc = new jsPDF(); // 默认是 A4纸，A4纸的尺寸是 210mm * 297mm（595px * 842px）
-	const _rate = 210 / 595;
-	var _w = width * _rate;
-	var _h = height * _rate;
-	var _c = 1;
-	if (_w > 210 * 0.9) {
-		_c = 210 * 0.9 / _w;
-		_w = 210 * 0.9;
-		_h = _c * _h;
-	}
-	if (_h > 297 * 0.9) {
-		const _c2 = 297 * 0.9 / _h;
-		_h = 297 * 0.9;
-		_w = _w * _c2;
-		_c = _c * _c2;
-	}
+	const { maxWidth, maxHeight } = await getMaxWidthHeight(blobFileAry)
+	const _rate = maxWidth / maxHeight;
+	const doc = new jsPDF('p', 'px', [maxWidth, maxHeight]); // 默认是 A4纸，A4纸的尺寸是 210mm * 297mm（595px * 842px）
+
 	// https://artskydj.github.io/jsPDF/docs/module-addImage.html#~addImage
 	// doc.addImage(blobFile, type, (210 - _w) / 2, (297 - _h) / 2, _w, _h, '', _c)
 	// doc.save(`${(new Date()).getTime()}.pdf`);
 
 	// 从top的位置开始加图片
 	for (let i = 0; i < blobFileAry.length; i++) {
-		doc.addImage(blobFileAry[i], type, (210 - _w) / 2, (297 - _h) / 2, _w, _h, '', _c)
-		doc.addPage([_w, _h])
+		const { width, height } = await getImgWidthHeight(blobFileAry[i])
+		var _w = width * _rate;
+		var _h = height * _rate;
+		var _c = 1;
+		if (_w > maxWidth) {
+			_c = maxWidth / _w;
+			_w = maxWidth;
+			_h = _c * _h;
+		}
+		if (_h > maxHeight) {
+			const _c2 = maxHeight / _h;
+			_h = maxHeight;
+			_w = _w * _c2;
+			_c = _c * _c2;
+		}
+		doc.addImage(blobFileAry[i], type, (maxWidth - _w) / 2, (maxHeight - _h) / 2, _w, _h, '', _c)
+		doc.addPage([maxWidth, maxHeight])
 	}
 	// 删除最后一页留白
 	const targetPage = doc.internal.getNumberOfPages()
