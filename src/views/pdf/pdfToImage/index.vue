@@ -10,6 +10,12 @@
         <div class="main-ct">
             <div v-show="imagesList.length < 1" class="no-data">{{ imagesLoading ? '正在解析pdf文件...' : '暂无数据，请先上传pdf文件' }}
             </div>
+            <div v-show="imagesList.length > 0" style="margin:15px 0 10px">
+                <el-button :loading="downloadLoading" style="margin:0 0 0 10px" type="primary" icon="el-icon-document"
+                    @click="handleExportPDF">
+                    导出为PDF
+                </el-button>
+            </div>
             <div id="draggable-wrapper">
                 <div class="item" v-for="(item, index) in imagesList" :key="index">
                     <span class="num">{{ index + 1 }}</span>
@@ -44,6 +50,7 @@ export default {
             imagesLoading: false,
             dialogVisible: false,
             selectedIndex: '',
+            downloadLoading: false,
         }
     },
     mounted() {
@@ -90,6 +97,56 @@ export default {
             if (!this.imagesList[index]) return;
             this.$lib.downloadImg(this.imagesList[index].src)
         },
+        async handleExportPDF() {
+            this.downloadLoading = true;
+            const _temp = [...this.imagesList];
+            const { maxWidth, maxHeight } = await this.getMaxWidthHeight()
+            this.$lib.downloadPdf(_temp, 'PNG', maxWidth, maxHeight)
+            this.downloadLoading = false;
+        },
+        // 获取图片数组里面最大的宽度和高度
+        async getMaxWidthHeight() {
+            const widthList = []
+            const heightList = []
+            let maxHeight = 0
+            let maxWidth = 0
+            for (let i = 0; i < this.imagesList.length; i++) {
+                const { src } = this.imagesList[i]
+                const { width, height } = await this.getImgWidthHeight(src)
+                widthList.push(width)
+                heightList.push(height)
+            }
+            // 把数组变成升序然后倒过来取第一个就是拿最大宽度
+            maxWidth = widthList.sort().reverse()[0]
+            maxHeight = heightList.sort().reverse()[0]
+            return {
+                maxWidth,
+                maxHeight,
+            }
+        },
+        //获取图片宽高
+        getImgWidthHeight(src) {
+            return new Promise((resolve, reject) => {
+                const img = new Image()
+                img.src = src
+                // 图片是否有缓存 如果有缓存可以直接拿 如果没有缓存 需要从onload拿
+                if (img.complete) {
+                    const { width, height } = img
+                    resolve({
+                        width,
+                        height,
+                    })
+                } else {
+                    img.onload = function () {
+                        const { width, height } = img
+                        resolve({
+                            width,
+                            height,
+                        })
+                    }
+                }
+            })
+        },
     }
 }
 </script>
@@ -104,7 +161,6 @@ export default {
     }
 
     .main-ct {
-        display: flex;
         margin: 20px 0 0;
         border: #eee 1px solid;
         // min-height: calc(100vh - 270px);
@@ -118,6 +174,7 @@ export default {
             align-items: center;
             color: #909399;
             font-size: 14px;
+            line-height: 60px;
         }
 
         #draggable-wrapper {

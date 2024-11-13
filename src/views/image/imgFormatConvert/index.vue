@@ -153,7 +153,7 @@ export default {
             }
             if (Number(this.currentValue) == 4) {
                 const { type = 'PNG', width = 0, height = 0 } = this.imgOriginalInfo;
-                return this.$lib.downloadPdf(this.blobFile, type, width, height)
+                return this.$lib.downloadPdf([this.blobFile], type, width, height)
             }
             this.$lib.downloadImg(this.blobFile, this.options[this.currentValue].label)
         },

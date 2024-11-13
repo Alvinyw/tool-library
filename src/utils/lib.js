@@ -363,26 +363,36 @@ export function getBlobFromAnyImgData(imgData, callback) {
  * @param { width } 图片宽度
  * @param { height } 图片高度
  */
-export function downloadPdf(blobFile = '', type = 'PNG', width = 0, height = 0) {
-	if (!blobFile) return;
+export function downloadPdf(blobFileAry = [], type = 'PNG', width = 0, height = 0) {
+	if (!blobFileAry || !Array.isArray(blobFileAry)) return;
 	const doc = new jsPDF(); // 默认是 A4纸，A4纸的尺寸是 210mm * 297mm（595px * 842px）
 	const _rate = 210 / 595;
 	var _w = width * _rate;
 	var _h = height * _rate;
 	var _c = 1;
-	if (_w > 210*0.9) {
-		_c = 210*0.9 / _w;
-		_w = 210*0.9;
+	if (_w > 210 * 0.9) {
+		_c = 210 * 0.9 / _w;
+		_w = 210 * 0.9;
 		_h = _c * _h;
 	}
-	if (_h > 297*0.9) {
-		const _c2 = 297*0.9 / _h;
-		_h = 297*0.9;
+	if (_h > 297 * 0.9) {
+		const _c2 = 297 * 0.9 / _h;
+		_h = 297 * 0.9;
 		_w = _w * _c2;
 		_c = _c * _c2;
 	}
 	// https://artskydj.github.io/jsPDF/docs/module-addImage.html#~addImage
-	doc.addImage(blobFile, type, (210 - _w) / 2, (297 - _h) / 2, _w, _h, '', _c)
+	// doc.addImage(blobFile, type, (210 - _w) / 2, (297 - _h) / 2, _w, _h, '', _c)
+	// doc.save(`${(new Date()).getTime()}.pdf`);
+
+	// 从top的位置开始加图片
+	for (let i = 0; i < blobFileAry.length; i++) {
+		doc.addImage(blobFileAry[i], type, (210 - _w) / 2, (297 - _h) / 2, _w, _h, '', _c)
+		doc.addPage([_w, _h])
+	}
+	// 删除最后一页留白
+	const targetPage = doc.internal.getNumberOfPages()
+	doc.deletePage(targetPage)
 	doc.save(`${(new Date()).getTime()}.pdf`);
 }
 
@@ -473,7 +483,7 @@ export function calcBase64Size(base64) {
 
 export function compressionImage(src, callBack, maxSize = 1, scale = 0.9) {
 	const imgSize = calcBase64Size(src)
-	if(maxSize > imgSize) {
+	if (maxSize > imgSize) {
 		return callBack(src);
 	}
 	let _scale = scale;
