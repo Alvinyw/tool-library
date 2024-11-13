@@ -8,9 +8,12 @@
             </div>
         </div>
         <div class="tool-grp">
-            <input id="imageUpload" type="file"
-                accept="image/png, image/jpeg, image/gif, image/jpg, image/tiff, image/bmp" @change="onUploadChange" />
-            <el-button :loading="downloadLoading" style="margin:0 0 0 10px" type="primary" icon="el-icon-document"
+            <el-upload class="upload-image" action="#3" :auto-upload="false" multiple :show-file-list="false" accept="image/*"
+                :file-list="fileList" :on-change="handleImageUpload">
+                <el-button>上传图片</el-button>
+            </el-upload>
+            <el-button style="margin:0 10px" @click="handleDeleteAll">删除全部</el-button>
+            <el-button :loading="downloadLoading" type="primary" icon="el-icon-document"
                 @click="handleExportPDF">
                 导出为PDF
             </el-button>
@@ -23,9 +26,9 @@
                     <el-image style="width: 100%; height: 100%" :src="item.src" :preview-src-list="[item.src]">
                     </el-image>
                     <span class="num">{{ index + 1 }}</span>
-                    <div class="tool"><i class="el-icon-download" @click="downloadImg(index)" title="下载图片"></i><i
-                            class="el-icon-full-screen" @click="onImageZoomIn(index)" title="全屏查看图片"></i><i
-                            class="el-icon-delete" @click="onImageDelete(index)" title="删除图片"></i></div>
+                    <div class="tool"><i class="el-icon-download" @click="handleImageDownload(index)" title="下载图片"></i><i
+                            class="el-icon-full-screen" @click="handleImageZoomIn(index)" title="全屏查看图片"></i><i
+                            class="el-icon-delete" @click="handleImageDelete(index)" title="删除图片"></i></div>
                     <!-- <img :src="item.src" alt="image" /> -->
                 </div>
             </div>
@@ -35,7 +38,7 @@
                 alt="image" />
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="downloadImg(selectedIndex)">下载</el-button>
+                <el-button type="primary" @click="handleImageDownload(selectedIndex)">下载</el-button>
             </span>
         </el-dialog>
     </div>
@@ -55,6 +58,7 @@ export default {
             imagesLoading: false,
             dialogVisible: false,
             selectedIndex: '',
+            fileList: [],
             downloadLoading: false,
         }
     },
@@ -90,7 +94,7 @@ export default {
             this.imagesLoading = true;
             return true;
         },
-        onImageZoomIn(idx) {
+        handleImageZoomIn(idx) {
             this.dialogVisible = true;
             this.selectedIndex = idx;
         },
@@ -98,7 +102,7 @@ export default {
             this.imagesList = pdfImages;
             this.imagesLoading = false;
         },
-        downloadImg(index) {
+        handleImageDownload(index) {
             if (!this.imagesList[index]) return;
             this.$lib.downloadImg(this.imagesList[index].src)
         },
@@ -111,33 +115,16 @@ export default {
             this.$lib.downloadPdf(_temp, 'PNG')
             this.downloadLoading = false;
         },
-        onUploadChange(e) {
-            var ele = document.getElementById("imageUpload");
-            var file = ele.files[0];
-            //判断获取的是否为图片文件
-            if (!/image\/\w+/.test(file.type)) {
-                this.$message({
-                    message: '请确保导入文件为图片',
-                    type: 'warning'
-                });
-                return false;
-            }
-            var _this = this;
-            this.$lib.getBlobFromAnyImgData(file, (blob) => {
-                let blobFile = '';
-                if (blob instanceof Blob) {
-                    blobFile = URL.createObjectURL(blob);
-                } else {
-                    blobFile = blob;
-                }
-                _this.imagesList.unshift({ src: blobFile, isNew: true });
-                // https://blog.csdn.net/u010622874/article/details/109487800
-                e.target.value = '';
-            });
-        },
-        onImageDelete(index) {
+        handleImageDelete(index) {
             this.imagesList.splice(index, 1);
         },
+        handleDeleteAll() {
+            this.imagesList = [];
+        },
+        handleImageUpload(file, fileList) {
+            this.imageUrl = URL.createObjectURL(file.raw);
+            this.imagesList.unshift({ src: URL.createObjectURL(file.raw), isNew: true });
+        }
     }
 }
 </script>
