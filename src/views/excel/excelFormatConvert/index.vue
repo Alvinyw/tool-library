@@ -1,9 +1,9 @@
 <template>
     <div class="excel-format-convert">
         <div class="sec-top">
-            <el-alert style="width: 320px;margin: 0 10px 0 0;"
-                title="使用说明：1、导入excel表格；2、填写导出的文件名（非必填）；3、选择导出的文件格式（支持'xlsx', 'csv', 'txt'）；4、点击“转换并导出”按钮。" type="info"
-                show-icon close-text="知道了">
+            <el-alert style="width: 30%;margin: 0 10px 0 0;"
+                title="使用场景：1、将Excel导出为'xlsx', 'csv', 'txt'等格式。" type="info"
+                close-text="知道了">
             </el-alert>
             <div style="flex: auto;"><upload-excel-component :on-success="handleSuccess"
                     :before-upload="beforeUpload" /></div>
