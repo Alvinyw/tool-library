@@ -10,7 +10,7 @@
         <div class="main-ct">
             <div v-show="imagesList.length < 1" class="no-data">{{ imagesLoading ? '正在解析pdf文件...' : '暂无数据，请先上传pdf文件' }}
             </div>
-            <div v-show="imagesList.length > 0" style="margin:15px 0 10px">
+            <div style="margin:15px 0 10px">
                 <el-button :loading="downloadLoading" style="margin:0 0 0 10px" type="primary" icon="el-icon-document"
                     @click="handleExportPDF">
                     导出为PDF
@@ -97,14 +97,14 @@ export default {
             if (!this.imagesList[index]) return;
             this.$lib.downloadImg(this.imagesList[index].src)
         },
-        async handleExportPDF() {
+        handleExportPDF() {
             this.downloadLoading = true;
             const _temp = [];
             this.imagesList.forEach((item) => {
                 _temp.push(item.src);
             })
             this.$lib.downloadPdf(_temp, 'PNG')
-            // this.downloadLoading = false;
+            this.downloadLoading = false;
         }
     }
 }

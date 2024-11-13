@@ -411,16 +411,20 @@ export async function getMaxWidthHeight(imagesSrcList = []) {
  * 将图片下载为 pdf
  * @param { blobFileAry } 图片地址列表
  * @param { type } 图片类型
+ * 参考文章：https://www.jianshu.com/p/43d69b8ff8e8
+ * 参考文章：https://artskydj.github.io/jsPDF/docs/module-addImage.html#~addImage
  */
 export async function downloadPdf(blobFileAry = [], type = 'PNG') {
 	if (!blobFileAry || !Array.isArray(blobFileAry)) return;
-	const { maxWidth, maxHeight } = await getMaxWidthHeight(blobFileAry)
+	// const { maxWidth, maxHeight } = await getMaxWidthHeight(blobFileAry)
+	// A4纸的尺寸是210毫米×297毫米
+	// 当分辨率是72像素/英寸时，A4纸长宽像素分别是842×595;
+	// 当分辨率是150像素/英寸时，A4纸长宽像素分别是1754×1240;
+	// 当分辨率是300像素/英寸时，A4纸长宽像素分别是3508×2479。
+	const maxHeight = 1754;
+	const maxWidth = 1240;
 	const _rate = maxWidth / maxHeight;
-	const doc = new jsPDF('p', 'px', [maxWidth, maxHeight]); // 默认是 A4纸，A4纸的尺寸是 210mm * 297mm（595px * 842px）
-
-	// https://artskydj.github.io/jsPDF/docs/module-addImage.html#~addImage
-	// doc.addImage(blobFile, type, (210 - _w) / 2, (297 - _h) / 2, _w, _h, '', _c)
-	// doc.save(`${(new Date()).getTime()}.pdf`);
+	const doc = new jsPDF('p', 'px', [maxWidth, maxHeight]);
 
 	// 从top的位置开始加图片
 	for (let i = 0; i < blobFileAry.length; i++) {
@@ -428,14 +432,14 @@ export async function downloadPdf(blobFileAry = [], type = 'PNG') {
 		var _w = width * _rate;
 		var _h = height * _rate;
 		var _c = 1;
-		if (_w > maxWidth) {
-			_c = maxWidth / _w;
-			_w = maxWidth;
+		if (_w > maxWidth*0.9) {
+			_c = maxWidth*0.9 / _w;
+			_w = maxWidth*0.9;
 			_h = _c * _h;
 		}
-		if (_h > maxHeight) {
-			const _c2 = maxHeight / _h;
-			_h = maxHeight;
+		if (_h > maxHeight*0.9) {
+			const _c2 = maxHeight*0.9 / _h;
+			_h = maxHeight*0.9;
 			_w = _w * _c2;
 			_c = _c * _c2;
 		}
