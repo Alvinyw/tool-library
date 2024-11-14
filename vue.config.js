@@ -5,8 +5,8 @@ function resolve(dir) {
 }
 
 module.exports = {
-  publicPath: process.env.VUE_APP_PUBLICPATH,
-  // publicPath: './', // 当项目部署在本地时，需要将publicPath设置为空
+  // publicPath: process.env.VUE_APP_PUBLICPATH,
+  publicPath: './', // 当项目部署在本地时，需要将publicPath设置为空
   outputDir: 'dist',
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',
