@@ -443,7 +443,8 @@ export async function downloadPdf(blobFileAry = [], type = 'PNG', callBackback =
 			_w = _w * _c2;
 			_c = _c * _c2;
 		}
-		doc.addImage(blobFileAry[i], type, (maxWidth - _w) / 2, (maxHeight - _h) / 2, _w, _h, '', _c)
+		// https://parallax.github.io/jsPDF/docs/module-addImage.html#~addImage
+		doc.addImage(blobFileAry[i], type, (maxWidth - _w) / 2, (maxHeight - _h) / 2, _w, _h, '', 'FAST')
 		doc.addPage([maxWidth, maxHeight])
 	}
 	// 删除最后一页留白

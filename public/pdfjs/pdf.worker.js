@@ -3781,7 +3781,7 @@ class PDFDocument {
     const pdfFonts = [];
     const initialState = {
       get font() {
-        return pdfFonts.at(-1);
+        return pdfFonts.pop();
       },
       set font(font) {
         pdfFonts.push(font);
@@ -21627,7 +21627,7 @@ function getRanges(glyphs, toUnicodeExtraMap, numGlyphs) {
 }
 function createCmapTable(glyphs, toUnicodeExtraMap, numGlyphs) {
   const ranges = getRanges(glyphs, toUnicodeExtraMap, numGlyphs);
-  const numTables = ranges.at(-1)[1] > 0xffff ? 2 : 1;
+  const numTables = ranges.pop()[1] > 0xffff ? 2 : 1;
   let cmap = "\x00\x00" + string16(numTables) + "\x00\x03" + "\x00\x01" + (0, _util.string32)(4 + numTables * 8);
   let i, ii, j, jj;
   for (i = ranges.length - 1; i >= 0; --i) {
@@ -22888,7 +22888,7 @@ class Font {
           }
         } else if (op === 0x2b && !tooComplexToFollowFunctions) {
           if (!inFDEF && !inELSE) {
-            funcId = stack.at(-1);
+            funcId = stack.pop();
             if (isNaN(funcId)) {
               (0, _util.info)("TT: CALL empty stack (or invalid entry).");
             } else {
@@ -22965,7 +22965,7 @@ class Font {
           --ifLevel;
         } else if (op === 0x1c) {
           if (!inFDEF && !inELSE) {
-            const offset = stack.at(-1);
+            const offset = stack.pop();
             if (offset > 0) {
               i += offset - 1;
             }
@@ -31289,7 +31289,7 @@ function compileGlyf(code, cmds, font) {
     }
     const instructionLength = getUint16(code, i);
     i += 2 + instructionLength;
-    const numberOfPoints = endPtsOfContours.at(-1) + 1;
+    const numberOfPoints = endPtsOfContours.pop() + 1;
     const points = [];
     while (points.length < numberOfPoints) {
       flags = code[i++];
@@ -31339,13 +31339,13 @@ function compileGlyf(code, cmds, font) {
       const contour = points.slice(startPoint, endPoint + 1);
       if (contour[0].flags & 1) {
         contour.push(contour[0]);
-      } else if (contour.at(-1).flags & 1) {
-        contour.unshift(contour.at(-1));
+      } else if (contour.pop().flags & 1) {
+        contour.unshift(contour.pop());
       } else {
         const p = {
           flags: 1,
-          x: (contour[0].x + contour.at(-1).x) / 2,
-          y: (contour[0].y + contour.at(-1).y) / 2
+          x: (contour[0].x + contour.pop().x) / 2,
+          y: (contour[0].y + contour.pop().y) / 2
         };
         contour.unshift(p);
         contour.push(p);
@@ -36006,7 +36006,7 @@ class Type1CharString {
             break;
           case (12 << 8) + 6:
             if (seacAnalysisEnabled) {
-              const asb = this.stack.at(-5);
+              const asb = this.stack[this.stack.length - 5];
               this.seac = this.stack.splice(-4, 4);
               this.seac[0] += this.lsb - asb;
               error = this.executeCommand(0, COMMAND_MAP.endchar);
@@ -36591,7 +36591,7 @@ class RadialAxialShading extends BaseShading {
       colorStops[1][0] += BaseShading.SMALL_NUMBER;
     }
     if (!extendEnd) {
-      colorStops.at(-1)[0] -= BaseShading.SMALL_NUMBER;
+      colorStops.pop()[0] -= BaseShading.SMALL_NUMBER;
       colorStops.push([1, background]);
     }
     this.colorStops = colorStops;
@@ -36803,11 +36803,11 @@ class MeshShading extends BaseShading {
             verticesLeft = 3;
             break;
           case 1:
-            ps.push(ps.at(-2), ps.at(-1));
+            ps.push(ps[ps.length - 2], ps.pop());
             verticesLeft = 1;
             break;
           case 2:
-            ps.push(ps.at(-3), ps.at(-1));
+            ps.push(ps[ps.length - 3], ps.pop());
             verticesLeft = 1;
             break;
         }
@@ -37422,7 +37422,7 @@ function getXfaFontDict(name) {
   dict.set("CIDToGIDMap", _primitives.Name.get("Identity"));
   dict.set("W", widths);
   dict.set("FirstChar", widths[0]);
-  dict.set("LastChar", widths.at(-2) + widths.at(-1).length - 1);
+  dict.set("LastChar", widths[widths.length - 2] + widths.pop().length - 1);
   const descriptor = new _primitives.Dict(null);
   dict.set("FontDescriptor", descriptor);
   const systemInfo = new _primitives.Dict(null);
@@ -38598,7 +38598,7 @@ class PostScriptCompiler {
             i += 6;
             break;
           }
-          ast1 = stack.at(-1);
+          ast1 = stack.pop();
           if (ast1.type === "literal" || ast1.type === "var") {
             stack.push(ast1);
             break;
@@ -39987,7 +39987,7 @@ function addState(parentState, pattern, checkFn, iterateFn, processFn) {
     const item = pattern[i];
     state = state[item] ||= [];
   }
-  state[pattern.at(-1)] = {
+  state[pattern.pop()] = {
     checkFn,
     iterateFn,
     processFn
@@ -41419,7 +41419,7 @@ function writeXFADataForAcroform(str, newRefs) {
     const nodePath = (0, _core_utils.parseXFAPath)(path);
     let node = xml.documentElement.searchNode(nodePath, 0);
     if (!node && nodePath.length > 1) {
-      node = xml.documentElement.searchNode([nodePath.at(-1)], 0);
+      node = xml.documentElement.searchNode([nodePath.pop()], 0);
     }
     if (node) {
       node.childNodes = Array.isArray(value) ? value.map(val => new _xml_parser.SimpleDOMNode("value", val)) : [new _xml_parser.SimpleDOMNode("#text", value)];
@@ -41527,7 +41527,7 @@ async function incrementalUpdate({
   const newXref = new _primitives.Dict(null);
   const refForXrefTable = xrefInfo.newRef;
   let buffer, baseOffset;
-  const lastByte = originalData.at(-1);
+  const lastByte = originalData.pop();
   if (lastByte === 0x0a || lastByte === 0x0d) {
     buffer = [];
     baseOffset = originalData.length;
@@ -42012,7 +42012,7 @@ class SimpleXMLParser extends XMLParserBase {
   }
   onEndElement(name) {
     this._currentFragment = this._stack.pop() || [];
-    const lastElement = this._currentFragment.at(-1);
+    const lastElement = this._currentFragment.pop();
     if (!lastElement) {
       return null;
     }
@@ -42730,7 +42730,7 @@ class AESBaseCipher {
     }
     let outputLength = 16 * result.length;
     if (finalize) {
-      const lastBlock = result.at(-1);
+      const lastBlock = result.pop();
       let psLen = lastBlock[15];
       if (psLen <= 16) {
         for (let i = 15, ii = 16 - psLen; i >= ii; --i) {
@@ -42936,7 +42936,7 @@ class PDF20 {
     let k = calculateSHA256(input, 0, input.length).subarray(0, 32);
     let e = [0];
     let i = 0;
-    while (i < 64 || e.at(-1) > i - 32) {
+    while (i < 64 || e.pop() > i - 32) {
       const combinedLength = password.length + k.length + userBytes.length,
         combinedArray = new Uint8Array(combinedLength);
       let writeOffset = 0;
@@ -44358,7 +44358,7 @@ class Catalog {
       map.set(pageIndex++, [error, null]);
     }
     while (queue.length > 0) {
-      const queueItem = queue.at(-1);
+      const queueItem = queue.pop();
       const {
         currentNode,
         posInKids
@@ -46740,7 +46740,7 @@ class Border extends _xfa_object.XFAObject {
     if (!this[_symbol_utils.$extra]) {
       const edges = this.edge.children.slice();
       if (edges.length < 4) {
-        const defaultEdge = edges.at(-1) || new Edge({});
+        const defaultEdge = edges.pop() || new Edge({});
         for (let i = edges.length; i < 4; i++) {
           edges.push(defaultEdge);
         }
@@ -46780,7 +46780,7 @@ class Border extends _xfa_object.XFAObject {
     if (this.corner.children.some(node => node.radius !== 0)) {
       const cornerStyles = this.corner.children.map(node => node[_symbol_utils.$toStyle]());
       if (cornerStyles.length === 2 || cornerStyles.length === 3) {
-        const last = cornerStyles.at(-1);
+        const last = cornerStyles.pop();
         for (let i = cornerStyles.length; i < 4; i++) {
           cornerStyles.push(last);
         }
@@ -51877,7 +51877,7 @@ function isPrintOnly(node) {
 }
 function getCurrentPara(node) {
   const stack = node[_symbol_utils.$getTemplateRoot]()[_symbol_utils.$extra].paraStack;
-  return stack.length ? stack.at(-1) : null;
+  return stack.length ? stack.pop() : null;
 }
 function setPara(node, nodeStyle, value) {
   if (value.attributes.class?.includes("xfaRich")) {
@@ -52406,7 +52406,7 @@ class FontSelector {
     this.stack = [new FontInfo(defaultXfaFont, defaultParaMargin, defaultLineHeight, fontFinder)];
   }
   pushData(xfaFont, margin, lineHeight) {
-    const lastFont = this.stack.at(-1);
+    const lastFont = this.stack.pop();
     for (const name of ["typeface", "posture", "weight", "size", "letterSpacing"]) {
       if (!xfaFont[name]) {
         xfaFont[name] = lastFont.xfaFont[name];
@@ -52427,7 +52427,7 @@ class FontSelector {
     this.stack.pop();
   }
   topFont() {
-    return this.stack.at(-1);
+    return this.stack.pop();
   }
 }
 class TextMeasure {
@@ -53435,7 +53435,7 @@ function parseExpression(expr, dotDotAllowed, noExpr = true) {
         (0, _util.warn)("XFA - Invalid index in SOM expression");
         return null;
       }
-      parsed.at(-1).index = parseIndex(match[0]);
+      parsed.pop().index = parseIndex(match[0]);
       pos += match[0].length + 1;
       continue;
     }
@@ -53642,7 +53642,7 @@ class DataHandler {
   serialize(storage) {
     const stack = [[-1, this.data[_symbol_utils.$getChildren]()]];
     while (stack.length > 0) {
-      const last = stack.at(-1);
+      const last = stack.pop();
       const [i, children] = last;
       if (i + 1 === children.length) {
         stack.pop();
@@ -53974,7 +53974,7 @@ class Builder {
     }
     const prefixStack = this._namespacePrefixes.get(prefix);
     if (prefixStack?.length > 0) {
-      return prefixStack.at(-1);
+      return prefixStack.pop();
     }
     (0, _util.warn)(`Unknown namespace prefix: ${prefix}.`);
     return null;
@@ -56392,7 +56392,7 @@ class P extends XhtmlObject {
   }
   [_symbol_utils.$text]() {
     const siblings = this[_symbol_utils.$getParent]()[_symbol_utils.$getChildren]();
-    if (siblings.at(-1) === this) {
+    if (siblings.pop() === this) {
       return super[_symbol_utils.$text]();
     }
     return super[_symbol_utils.$text]() + "\n";

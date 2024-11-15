@@ -23,7 +23,7 @@
             </div>
             <div id="draggable-wrapper">
                 <div class="item" v-for="(item, index) in imagesList" :key="index" :class="item.isNew ? 'new' : ''">
-                    <el-image style="width: 100%; height: 100%" :src="item.src" :preview-src-list="[item.src]">
+                    <el-image style="max-width: 100%; max-height: 100%" :src="item.src" :preview-src-list="[item.src]">
                     </el-image>
                     <span class="num">{{ index + 1 }}</span>
                     <div class="tool"><i class="el-icon-download" @click="handleImageDownload(index)"
